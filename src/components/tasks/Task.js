@@ -19,7 +19,6 @@ class Task extends Component {
         return (
             <div className="container">
                 <Fragment>
-                    <Form />
                     <h2>Tasks</h2>
                     <table className="table table-striped">
                         <thead>

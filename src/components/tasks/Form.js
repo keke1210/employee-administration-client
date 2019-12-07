@@ -6,7 +6,7 @@ import { addTask } from '../../actions/tasks';
 class Form extends Component {
     state = {
         taskName: '',
-        descripton: '',
+        description: '',
         completed: false,
         projectId: 1,
         userId: 1
@@ -26,10 +26,10 @@ class Form extends Component {
         console.log(this.state)
 
         e.preventDefault();
-        const { taskName, descripton, completed } = this.state;
+        const { taskName, description, completed } = this.state;
         const task = {
             taskName,
-            descripton,
+            description,
             completed,
             projectId: 1,
             userId: 1
@@ -38,14 +38,14 @@ class Form extends Component {
         this.props.addTask(task);
         this.setState({
             taskName: "",
-            descripton: "",
+            description: "",
             completed: false
         });
     }
 
     render() {
 
-        const { name, descripton, completed } = this.state;
+        const { taskName, description, completed } = this.state;
 
         return (
             <div className="card card-body mt-4 mb-4">
@@ -59,21 +59,21 @@ class Form extends Component {
                             type="text"
                             name="taskName"
                             onChange={this.onChange}
-                            value={name}
+                            value={taskName}
                         />
                     </div>
                     <div className="form-group">
                         <label>Task Description</label>
-                        <input
+                        <textarea
                             className="form-control"
                             type="text"
-                            name="descripton"
+                            name="description"
                             onChange={this.onChange}
-                            value={descripton}
+                            value={description}
                         />
                     </div>
                     <div className="form-group">
-                        <label>Message</label>
+                        <label>Completed</label>
                         <input
                             className="form-control"
                             type="text"
