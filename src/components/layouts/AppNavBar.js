@@ -3,28 +3,21 @@ import {
     Collapse,
     Navbar,
     NavbarToggler,
-    NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
-    Container
+    Container,
+    UncontrolledDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { logout } from '../../actions/auth';
-
+import { Role } from '../../_helpers';
 
 class AppNavBar extends Component {
     state = {
         isOpen: false
     }
-
-    static propTypes = {
-        auth: PropTypes.object.isRequired,
-        logout: PropTypes.func.isRequired
-    }
-
 
     toggle = () => {
         this.setState({
@@ -33,36 +26,50 @@ class AppNavBar extends Component {
     }
 
     render() {
-
-        const { isAuthenticated, user } = this.props.auth;
-
+        const user = JSON.parse(localStorage.getItem('user'));
 
         const authLinks = (
             <Fragment>
-                <Nav className="ml-auto">
+                {user && user.role === Role.Administrator &&
+                    <Nav className="mr-auto" navbar>
+                        <NavItem>
+                            <Link to="/users" style={{ textDecoration: 'none', color: 'white' }}>Users</Link>
+                        </NavItem>
+                        <NavItem>
+                            <Link to="/departments" style={{ textDecoration: 'none', color: 'white' }}>Departments</Link>
+                        </NavItem>
+                        <NavItem>
+                            <Link to="/projects" style={{ textDecoration: 'none', color: 'white' }}>Projects</Link>
+                        </NavItem>
+                        <NavItem>
+                            <Link to="/tasks" style={{ textDecoration: 'none', color: 'white' }}>Tasks</Link>
+                        </NavItem>
+                    </Nav>}
+                <Nav className="mr-auto">
                     <NavItem>
-                        <button onClick={this.props.logout} className="nac-link btn btn-info btn-sm text-light">Log out</button>
+                        <Link to="/profile" style={{ textDecoration: 'none', color: 'white' }}>Profile</Link>
                     </NavItem>
                 </Nav>
+                <Nav className="ml-auto">
+                    <NavItem>
+                        <Link to="/login" style={{ textDecoration: 'none', color: 'white' }} >Logout</Link>
+                    </NavItem>
+                </Nav>
+
             </Fragment>
         );
 
 
         const guestLinks = (
             <Fragment>
-                <Nav className="ml-auto">
+                <Nav className="ml-auto" navbar>
                     <NavItem>
                         <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>
                             Login &nbsp;&nbsp;
-                                    </Link>
-                    </NavItem>
-                </Nav>
-
-                <Nav>
-                    <NavItem>
+                        </Link>
                         <Link to="/register" style={{ textDecoration: 'none', color: 'white' }}>
                             Register
-                                </Link>
+                        </Link>
                     </NavItem>
                 </Nav>
             </Fragment>
@@ -71,7 +78,7 @@ class AppNavBar extends Component {
         return (
             <div>
                 <Navbar color="dark" dark expand="sm" className="mb-5">
-                    <Container>
+                    <Container className="col-md-11">
                         <Nav>
                             <NavItem>
                                 <Link className="navbar-brand" to="/">
@@ -82,21 +89,15 @@ class AppNavBar extends Component {
                         <NavbarToggler onClick={this.toggle}> ></NavbarToggler>
                         <Collapse isOpen={this.state.isOpen} navbar>
 
-                            {isAuthenticated ? authLinks : guestLinks}
+                            {user ? authLinks : guestLinks}
 
                         </Collapse>
 
                     </Container>
                 </Navbar>
-            </div>
+            </div >
         );
     }
 }
 
-
-const mapStateToProps = state => ({
-    auth: state.auth
-})
-
-
-export default connect(mapStateToProps, { logout })(AppNavBar);
+export default AppNavBar;

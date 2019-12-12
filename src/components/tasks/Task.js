@@ -13,6 +13,7 @@ class Task extends Component {
 
     componentDidMount() {
         this.props.getTasks();
+        console.log(this.props.items);
     }
 
     render() {
@@ -52,7 +53,7 @@ class Task extends Component {
 }
 
 const mapStateToProps = state => ({
-    tasks: state.tasks.tasks
+    tasks: state.items
 })
 
 

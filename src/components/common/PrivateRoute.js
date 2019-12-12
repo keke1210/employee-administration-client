@@ -1,29 +1,25 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
-
-const userData = localStorage.getItem('user');
 
 
-const PrivateRoute = ({ component: Component, auth, ...rest }) => (
+export const PrivateRoute = ({ component: Component, roles, ...rest }) => (
     <Route
         {...rest}
         render={props => {
-            if (auth.isLoading) {
-                return <h2>Loading...</h2>;
-            } else if (!auth.isAuthenticated) {
-                return <Redirect to="/login" />;
-            } else {
-                return <Component {...props} />;
+            const currentUser = JSON.parse(localStorage.getItem('user'));
+            if (!currentUser) {
+                // not logged in so redirect to login page with the return url
+                return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
             }
+
+            // check if route is restricted by role
+            if (roles && roles.indexOf(currentUser.role) === -1) {
+                // role not authorised so redirect to home page
+                return <Redirect to={{ pathname: '/' }} />
+            }
+
+            // authorised so return component
+            return <Component {...props} />
         }}
     />
 );
-
-
-const mapStateToProps = state => ({
-    auth: state.auth
-});
-
-export default connect(mapStateToProps)(PrivateRoute);

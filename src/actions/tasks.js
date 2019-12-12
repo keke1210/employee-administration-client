@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { createMessage } from './messages';
+// import { createMessage } from './messages';
 
-import { GET_TASKS, DELETE_TASK, ADD_TASK, GET_ERRORS } from './types';
+import { GET_TASKS, DELETE_TASK, ADD_TASK } from './types';
 
 // GET TASKS
 export const getTasks = () => dispatch => {
@@ -36,21 +36,21 @@ export const addTask = (task) => dispatch => {
     axios
         .post(`https://localhost:44339/api/v1/tasks/create`, task)
         .then(res => {
-            dispatch(createMessage({ taskAdded: "Task Added" }));
+            // dispatch(createMessage({ taskAdded: "Task Added" }));
             dispatch({
                 type: ADD_TASK,
                 payload: res.data
             })
         }).catch(err => {
-            const errors = {
-                msg: err.response.data.errors,
-                status: err.response.status
-            }
+            // const errors = {
+            //     msg: err.response.data.errors,
+            //     status: err.response.status
+            // }
 
-            dispatch({
-                type: GET_ERRORS,
-                payload: errors
-            });
+            // dispatch({
+            //     type: GET_ERRORS,
+            //     payload: errors
+            // });
         });
 
 
