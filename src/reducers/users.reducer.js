@@ -38,6 +38,32 @@ export function users(state = {}, action) {
                 loading: false,
                 error: action.error
             };
+        case userConstants.UPDATE_USER_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case userConstants.UPDATE_USER_SUCCESS:
+            const itemIndex = state.items.findIndex(user => user.id === action.payload.id)
+            const newArray = [
+                // destructure all items from beginning to the indexed item
+                ...state.items.slice(0, itemIndex),
+                // add the updated item to the array
+                action.payload,
+                // add the rest of the items to the array from the index after the replaced item
+                ...state.items.slice(itemIndex + 1)
+            ]
+            return {
+                ...state,
+                loading: false,
+                items: newArray
+            };
+        case userConstants.UPDATE_USER_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            };
         case userConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted
             return {

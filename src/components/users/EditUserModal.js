@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import {
     Button,
     Modal,
@@ -12,7 +12,8 @@ import {
 import { connect } from 'react-redux';
 import { userActions } from '../../actions/user.actions';
 import PropTypes from 'prop-types';
-
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export class EditUserModal extends Component {
     state = {
@@ -20,10 +21,10 @@ export class EditUserModal extends Component {
         modal: false,
         submitted: false,
         userData: {
+            id: '',
             firstName: '',
             lastName: '',
             userName: '',
-            role: '',
             password: '',
             confirmPassword: ''
         }
@@ -34,12 +35,17 @@ export class EditUserModal extends Component {
         isAdmin: PropTypes.bool
     };
 
-
     toggle = () => {
+        const { user } = this.props;
         this.setState({
             modal: !this.state.modal,
             submitted: false,
-            userData: {}
+            userData: {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                userName: user.userName
+            }
         });
     }
 
@@ -60,11 +66,11 @@ export class EditUserModal extends Component {
         this.setState({ submitted: true });
         const { userData } = this.state;
         if (userData.firstName && userData.lastName && userData.userName &&
-            userData.role && userData.password && userData.confirmPassword) {
+            userData.password && userData.confirmPassword) {
 
-            if (userData.password === userData.confirmPassword) {
+            if ((userData.password && userData.confirmPassword) && userData.password === userData.confirmPassword) {
                 // Add item via addItem action
-                this.props.addUser(userData);
+                this.props.updateUser(userData);
                 this.toggle();
             }
         }
@@ -74,54 +80,20 @@ export class EditUserModal extends Component {
         const { submitted, userData } = this.state;
 
         return (
-            <div>
-                <Button
-                    color='dark'
-                    style={{ marginBottom: '2rem' }}
-                    onClick={this.toggle}
-                >
-                    Edit User
+            <Fragment>
+                <Button color="info" className="btn-sm" onClick={this.toggle} >
+                    <FontAwesomeIcon icon={faPen} />
                 </Button>
-
-
 
                 <Modal
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                 >
-                    <ModalHeader toggle={this.toggle}>Add User</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Edit User</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                <Label for="item"></Label>
-                                <Input
-                                    className={submitted && !userData.firstName ? 'is-invalid' : ''}
-                                    type="text"
-                                    name="firstName"
-                                    id="firstName"
-                                    placeholder="First Name"
-                                    onChange={this.onChange}
-                                />
-                                {submitted && !userData.firstName &&
-                                    <small className="help-block text-danger">First Name is required</small>
-                                }
-                            </FormGroup>
-
-                            <FormGroup>
-                                <Input
-                                    className={submitted && !userData.lastName ? 'is-invalid' : ''}
-                                    type="text"
-                                    name="lastName"
-                                    id="lastName"
-                                    placeholder="Last Name"
-                                    onChange={this.onChange}
-                                />
-                                {submitted && !userData.lastName &&
-                                    <small className="help-block text-danger">Last Name is required</small>
-                                }
-                            </FormGroup>
-                            <FormGroup>
-
+                                <Label for="userName">Username</Label>
                                 <Input
                                     className={submitted && !userData.userName ? 'is-invalid' : ''}
                                     type="text"
@@ -129,12 +101,45 @@ export class EditUserModal extends Component {
                                     id="userName"
                                     placeholder="Username"
                                     onChange={this.onChange}
+                                    value={this.state.userData.userName}
                                 />
                                 {submitted && !userData.userName &&
                                     <small className="help-block text-danger">Username is required</small>
                                 }
                             </FormGroup>
                             <FormGroup>
+                                <Label for="firstName">First Name</Label>
+                                <Input
+                                    className={submitted && !userData.firstName ? 'is-invalid' : ''}
+                                    type="text"
+                                    name="firstName"
+                                    id="firstName"
+                                    placeholder="First Name"
+                                    onChange={this.onChange}
+                                    value={this.state.userData.firstName}
+                                />
+                                {submitted && !userData.firstName &&
+                                    <small className="help-block text-danger">First Name is required</small>
+                                }
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="lastName">Last Name</Label>
+                                <Input
+                                    className={submitted && !userData.lastName ? 'is-invalid' : ''}
+                                    type="text"
+                                    name="lastName"
+                                    id="lastName"
+                                    placeholder="Last Name"
+                                    onChange={this.onChange}
+                                    value={this.state.userData.lastName}
+
+                                />
+                                {submitted && !userData.lastName &&
+                                    <small className="help-block text-danger">Last Name is required</small>
+                                }
+                            </FormGroup>
+
+                            {/* <FormGroup>
 
                                 <select className={`custom-select ${submitted && !userData.role ? 'is-invalid' : ''}`} name="role" onChange={this.onChange}>
                                     <option>Select role</option>
@@ -144,14 +149,15 @@ export class EditUserModal extends Component {
                                 {submitted && !userData.role &&
                                     <small className="help-block text-danger">Role is required</small>
                                 }
-                            </FormGroup>
+                            </FormGroup> */}
                             <FormGroup>
+                                <Label for="password">Password</Label>
                                 <Input
                                     className={submitted && !userData.password ? 'is-invalid' : ''}
                                     type="password"
                                     name="password"
                                     id="password"
-                                    placeholder="Password"
+                                    placeholder="Please enter new password"
                                     onChange={this.onChange}
                                 />
                                 {submitted && !userData.password &&
@@ -159,12 +165,14 @@ export class EditUserModal extends Component {
                                 }
                             </FormGroup>
                             <FormGroup>
+                                <Label for="confirmPassword">Confirm Password</Label>
+
                                 <Input
                                     className={submitted && !userData.confirmPassword ? 'is-invalid' : ''}
                                     type="password"
                                     name="confirmPassword"
                                     id="confirmPassword"
-                                    placeholder="Confirm Password"
+                                    placeholder="Please confirm the new password"
                                     onChange={this.onChange}
                                 />
                                 {submitted && !userData.confirmPassword &&
@@ -176,15 +184,24 @@ export class EditUserModal extends Component {
                                     color="dark"
                                     style={{ marginTop: '2rem' }}
                                     block
-                                >Add Item</Button>
+                                >Edit</Button>
                             </FormGroup>
                         </Form>
                     </ModalBody>
 
                 </Modal>
-            </div>
+            </Fragment>
         )
     }
 }
 
-export default EditUserModal
+const mapStateToProps = state => ({
+    users: state.items
+});
+
+const actionCreators = {
+    updateUser: userActions.updateUser
+}
+
+
+export default connect(mapStateToProps, actionCreators)(EditUserModal);

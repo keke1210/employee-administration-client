@@ -5,7 +5,7 @@ import { Spinner, Button, Table } from 'reactstrap';
 import AddUserModal from './AddUserModal';
 import EditUserModal from './EditUserModal';
 
-import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { userActions } from '../../actions/user.actions';
@@ -49,9 +49,10 @@ class UserList extends React.Component {
                                 <td>{user.lastName}</td>
                                 <td>{user.role}</td>
                                 <td>
-                                    <Button color="info" className="btn-sm" >
+                                    {/* <Button color="info" className="btn-sm" >
                                         <FontAwesomeIcon icon={faPen} />
-                                    </Button>
+                                    </Button> */}
+                                    <EditUserModal user={user} />
                                     &nbsp;
                                     <Button className="btn btn-danger btn-sm" onClick={this.handleDeleteUser(user.id)}>
                                         <FontAwesomeIcon icon={faTrash} />

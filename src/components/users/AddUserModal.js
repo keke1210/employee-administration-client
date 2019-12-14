@@ -91,39 +91,13 @@ class AddUserModal extends Component {
                     toggle={this.toggle}
                 >
                     <ModalHeader toggle={this.toggle}>
-                        {buttonLabel === "Add" ? "Add User" : "Edit User"}
+                        Add User
+                        {/* {buttonLabel === "Add" ? "Add User" : "Edit User"} */}
                     </ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                <Label for="item"></Label>
-                                <Input
-                                    className={submitted && !userData.firstName ? 'is-invalid' : ''}
-                                    type="text"
-                                    name="firstName"
-                                    id="firstName"
-                                    placeholder="First Name"
-                                    onChange={this.onChange}
-                                />
-                                {submitted && !userData.firstName &&
-                                    <small className="help-block text-danger">First Name is required</small>
-                                }
-                            </FormGroup>
-
-                            <FormGroup>
-                                <Input
-                                    className={submitted && !userData.lastName ? 'is-invalid' : ''}
-                                    type="text"
-                                    name="lastName"
-                                    id="lastName"
-                                    placeholder="Last Name"
-                                    onChange={this.onChange}
-                                />
-                                {submitted && !userData.lastName &&
-                                    <small className="help-block text-danger">Last Name is required</small>
-                                }
-                            </FormGroup>
-                            <FormGroup>
+                                <Label for="userName">Username</Label>
 
                                 <Input
                                     className={submitted && !userData.userName ? 'is-invalid' : ''}
@@ -138,8 +112,39 @@ class AddUserModal extends Component {
                                 }
                             </FormGroup>
                             <FormGroup>
+                                <Label for="firstName">First Name</Label>
+                                <Input
+                                    className={submitted && !userData.firstName ? 'is-invalid' : ''}
+                                    type="text"
+                                    name="firstName"
+                                    id="firstName"
+                                    placeholder="First Name"
+                                    onChange={this.onChange}
+                                />
+                                {submitted && !userData.firstName &&
+                                    <small className="help-block text-danger">First Name is required</small>
+                                }
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="lastName">Last Name</Label>
 
-                                <select className={`custom-select ${submitted && !userData.role ? 'is-invalid' : ''}`} name="role" onChange={this.onChange}>
+                                <Input
+                                    className={submitted && !userData.lastName ? 'is-invalid' : ''}
+                                    type="text"
+                                    name="lastName"
+                                    id="lastName"
+                                    placeholder="Last Name"
+                                    onChange={this.onChange}
+                                />
+                                {submitted && !userData.lastName &&
+                                    <small className="help-block text-danger">Last Name is required</small>
+                                }
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label for="role">Role</Label>
+
+                                <select className={`custom-select ${submitted && !userData.role ? 'is-invalid' : ''}`} name="role" id="role" onChange={this.onChange}>
                                     <option>Select role</option>
                                     <option value="Employee">Employee</option>
                                     <option value="Administrator">Administrator</option>
@@ -149,6 +154,7 @@ class AddUserModal extends Component {
                                 }
                             </FormGroup>
                             <FormGroup>
+                                <Label for="password">Password</Label>
                                 <Input
                                     className={submitted && !userData.password ? 'is-invalid' : ''}
                                     type="password"
@@ -162,6 +168,8 @@ class AddUserModal extends Component {
                                 }
                             </FormGroup>
                             <FormGroup>
+                                <Label for="confirmPassword">Confirm Password</Label>
+
                                 <Input
                                     className={submitted && !userData.confirmPassword ? 'is-invalid' : ''}
                                     type="password"
@@ -179,7 +187,7 @@ class AddUserModal extends Component {
                                     color="dark"
                                     style={{ marginTop: '2rem' }}
                                     block
-                                >Add Item</Button>
+                                >Add</Button>
                             </FormGroup>
                         </Form>
                     </ModalBody>

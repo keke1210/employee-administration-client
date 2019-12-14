@@ -9,6 +9,7 @@ export const userActions = {
     register,
     getAll,
     createUser,
+    updateUser,
     delete: _delete
 };
 
@@ -82,6 +83,28 @@ function createUser(user) {
     function request(user) { return { type: userConstants.CREATE_USER_REQUEST, user } }
     function addUser(payload) { return { type: userConstants.CREATE_USER_SUCCESS, payload } }
     function failure(error) { return { type: userConstants.CREATE_USER_FAILURE, error } }
+}
+
+
+function updateUser(user) {
+    return dispatch => {
+        dispatch(request(user));
+
+        userService.update(user)
+            .then(
+                user => {
+                    dispatch(success(user));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(user) { return { type: userConstants.UPDATE_USER_REQUEST, user } }
+    function success(payload) { return { type: userConstants.UPDATE_USER_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.UPDATE_USER_FAILURE, error } }
 }
 
 
