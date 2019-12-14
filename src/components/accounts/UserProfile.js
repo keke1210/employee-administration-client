@@ -16,9 +16,10 @@ export class UserProfile extends Component {
     }
 
     componentDidMount() {
-        this.props.myProfile();
+        this.props.getProfile();
 
         const { user } = this.props;
+        console.log(user)
         this.setState({
             userName: user.userName,
             firstName: user.firstName,
@@ -72,16 +73,11 @@ export class UserProfile extends Component {
 
         let $imagePreview = (<div className="previewText image-container">Please select an Image for Preview</div>);
 
-
-
-
         if (myData.profilePhoto) {
-            console.log("binary")
             $imagePreview = (<div className="image-container" ><img alt="icon" width="200" src={`data:image/jpeg;base64,${myData.profilePhoto}`} /></div>);
         }
 
         if (this.state.imagePreviewUrl) {
-            console.log("alt")
             $imagePreview = (<div className="image-container" ><img src={this.state.imagePreviewUrl} alt="icon" width="200" /> </div>);
         }
         return (
@@ -152,7 +148,7 @@ function mapState(state) {
 }
 
 const actionCreators = {
-    myProfile: profileActions.getProfile,
+    getProfile: profileActions.getProfile,
     // getUsers: userActions.getAll,
     //  deleteUser: userActions.delete
 }

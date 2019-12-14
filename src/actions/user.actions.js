@@ -8,6 +8,7 @@ export const userActions = {
     logout,
     register,
     getAll,
+    createUser,
     delete: _delete
 };
 
@@ -61,6 +62,28 @@ function register(user) {
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
 
+function createUser(user) {
+    return dispatch => {
+        dispatch(request(user));
+
+        userService.register(user)
+            .then(
+                user => {
+                    dispatch(addUser(user));
+                    // dispatch(alertActions.success('User crea successful'));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(user) { return { type: userConstants.CREATE_USER_REQUEST, user } }
+    function addUser(payload) { return { type: userConstants.CREATE_USER_SUCCESS, payload } }
+    function failure(error) { return { type: userConstants.CREATE_USER_FAILURE, error } }
+}
+
 
 function getAll() {
     return dispatch => {
@@ -69,7 +92,10 @@ function getAll() {
         userService.getAll()
             .then(
                 users => dispatch(success(users)),
-                error => dispatch(failure(error.toString()))
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Error: Failed to fetch the data!"));
+                }
             );
     };
 
@@ -86,7 +112,10 @@ function _delete(id) {
         userService.delete(id)
             .then(
                 user => dispatch(success(id)),
-                error => dispatch(failure(id, error.toString()))
+                error => {
+                    dispatch(failure(id, error.toString()));
+                    dispatch(alertActions.error(error.toString()))
+                }
             );
     };
 

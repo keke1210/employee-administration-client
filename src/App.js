@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'font-awesome/css/font-awesome.min.css';
 import './App.css';
 import { history, Role } from './_helpers';
 import AppNavBar from './components/layouts/AppNavBar';
@@ -12,11 +13,16 @@ import { PrivateRoute } from './components/common';
 import { UserList } from './components/users';
 import { alertActions } from './actions';
 import { connect } from 'react-redux';
+import { Alert } from 'reactstrap';
 
 
 class App extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      visible: false
+    }
 
     history.listen((location, action) => {
       // clear alert on location change
@@ -24,8 +30,17 @@ class App extends Component {
     });
   }
 
+  onShowAlert = () => {
+    this.setState({ visible: true }, () => {
+      window.setTimeout(() => {
+        this.setState({ visible: false })
+      }, 2000)
+    });
+  }
+
   render() {
     const { alert } = this.props;
+    console.log(alert)
 
     return (
 
@@ -35,14 +50,19 @@ class App extends Component {
           <Fragment>
             <AppNavBar />
             <div className="container">
+              {/* <button onClick={this.onShowAlert} >Click</button> 
+              {alert.message && <Alert color={alert.type} isOpen={this.state.visible} transition={{ in: true, timeout: 2000 }}> {alert.message}</Alert  >} */}
               {alert.message &&
-                <div className={`alert ${alert.type}`}>{alert.message}</div>
+                <div className={`alert alert-${alert.type}`}>Error: {alert.message}</div>
               }
               <Switch>
                 <PrivateRoute exact path="/" component={Dashboard} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
                 <PrivateRoute exact path="/users" roles={[Role.Administrator]} component={UserList} />
+                {/* <PrivateRoute exact path="/departments" component={DepartmentList} />
+                <PrivateRoute exact path="/projects" component={ProjectList} />
+                <PrivateRoute exact path="/tasks" component={TaskList} /> */}
                 <PrivateRoute exact path="/profile" component={UserProfile} />
                 <Redirect from="*" to="/" />
               </Switch>

@@ -1,9 +1,15 @@
 import React, { Fragment } from 'react';
 
 import { connect } from 'react-redux';
-import { Button } from 'reactstrap';
+import { Spinner, Button, Table } from 'reactstrap';
+import AddUserModal from './AddUserModal';
+import EditUserModal from './EditUserModal';
+
+import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { userActions } from '../../actions/user.actions';
+// import PaginationFooter from '../../components/common/PaginationFooter';
 
 class UserList extends React.Component {
     componentDidMount() {
@@ -16,15 +22,13 @@ class UserList extends React.Component {
 
     render() {
         const { users } = this.props;
+        console.log(users);
         return (
             <Fragment>
                 <h2>Users</h2>
-                <Button
-                    color="dark"
-                    style={{ marginBottom: '2rem' }}
-                    onClick={this.toggle}
-                >Add user</Button>
-                <table className="table table-striped">
+                <AddUserModal buttonLabel="Edit" />
+                {/* <EditUserModal /> */}
+                <Table className="table table-striped" responsive hover>
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -32,13 +36,12 @@ class UserList extends React.Component {
                             <th>FirstName</th>
                             <th>LastName</th>
                             <th>Role</th>
-                            <th>-</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {users.loading && <em>Loading users...</em>} */}
-                        {users.error && <span className="text-danger">ERROR: {users.error}</span>}
-                        {users.items && users.items.map((user, index) => (
+
+                        {users && users.items && users.items.map((user, index) => (
                             <tr key={user.id}>
                                 <td>{user.id}</td>
                                 <td>{user.userName}</td>
@@ -46,37 +49,21 @@ class UserList extends React.Component {
                                 <td>{user.lastName}</td>
                                 <td>{user.role}</td>
                                 <td>
-                                    <button className="btn btn-info btn-sm">
-                                        Edit
-                                    </button>
-                                    <button className="btn btn-danger btn-sm" onClick={this.handleDeleteUser(user.id)}>
-                                        Delete
-                                    </button>
+                                    <Button color="info" className="btn-sm" >
+                                        <FontAwesomeIcon icon={faPen} />
+                                    </Button>
+                                    &nbsp;
+                                    <Button className="btn btn-danger btn-sm" onClick={this.handleDeleteUser(user.id)}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </Button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
-                </table>
-                {/* <h1>Hi {user.userName}!</h1>
-                <p>You're logged in with React!!</p>
-                <h3>All registered users:</h3>
-                {users.loading && <em>Loading users...</em>}
-                {users.error && <span className="text-danger">ERROR: {users.error}</span>}
-                {users.items &&
-                    <ul>
-                        {users.items.map((user, index) =>
-                            <li key={user.id}>
-                                {user.firstName + ' ' + user.lastName}
-                                {
-                                    user.deleting ? <em> - Deleting...</em>
-                                        : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
-                                            : <span> - <button onClick={this.handleDeleteUser(user.id)}>Delete</button></span>
-                                }
-                            </li>
-                        )}
-                    </ul>
-                } */}
-            </Fragment>
+                </Table>
+                {users.loading && <Spinner type="grow" color="dark" />}
+                {/* <PaginationFooter items={users} /> */}
+            </Fragment >
 
 
 

@@ -30,29 +30,32 @@ class AppNavBar extends Component {
 
         const authLinks = (
             <Fragment>
-                {user && user.role === Role.Administrator &&
-                    <Nav className="mr-auto" navbar>
-                        <NavItem>
-                            <Link to="/users" style={{ textDecoration: 'none', color: 'white' }}>Users</Link>
-                        </NavItem>
-                        <NavItem>
-                            <Link to="/departments" style={{ textDecoration: 'none', color: 'white' }}>Departments</Link>
-                        </NavItem>
-                        <NavItem>
-                            <Link to="/projects" style={{ textDecoration: 'none', color: 'white' }}>Projects</Link>
-                        </NavItem>
-                        <NavItem>
-                            <Link to="/tasks" style={{ textDecoration: 'none', color: 'white' }}>Tasks</Link>
-                        </NavItem>
-                    </Nav>}
-                <Nav className="mr-auto">
+                <Nav className="mr-auto" navbar>
+                    {user && user.role === Role.Administrator &&
+                        <Fragment>
+                            <NavItem>
+                                <Link to="/users" style={{ textDecoration: 'none', color: 'white' }}>Users&nbsp;&nbsp;</Link>
+                            </NavItem>
+                        </Fragment>
+                    }
                     <NavItem>
-                        <Link to="/profile" style={{ textDecoration: 'none', color: 'white' }}>Profile</Link>
+                        <Link to="/departments" style={{ textDecoration: 'none', color: 'white' }}>Departments&nbsp;&nbsp;</Link>
+                    </NavItem>
+                    <NavItem>
+                        <Link to="/projects" style={{ textDecoration: 'none', color: 'white' }}>Projects&nbsp;&nbsp;</Link>
+                    </NavItem>
+                    <NavItem>
+                        <Link to="/tasks" style={{ textDecoration: 'none', color: 'white' }}>Tasks</Link>
                     </NavItem>
                 </Nav>
-                <Nav className="ml-auto">
+
+
+                <Nav className="ml-auto" navbar>
                     <NavItem>
-                        <Link to="/login" style={{ textDecoration: 'none', color: 'white' }} >Logout</Link>
+                        <Link to="/profile" style={{ textDecoration: 'none', color: 'white' }}>{`Hello ${user && user.userName}`}&nbsp;&nbsp;&nbsp;&nbsp;</Link>
+                    </NavItem>
+                    <NavItem>
+                        <Link to="/login" style={{ textDecoration: 'none', color: 'grey' }} >Logout</Link>
                     </NavItem>
                 </Nav>
 
@@ -67,10 +70,13 @@ class AppNavBar extends Component {
                         <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>
                             Login &nbsp;&nbsp;
                         </Link>
+                    </NavItem>
+                    <NavItem>
                         <Link to="/register" style={{ textDecoration: 'none', color: 'white' }}>
                             Register
                         </Link>
                     </NavItem>
+
                 </Nav>
             </Fragment>
         );
@@ -78,7 +84,7 @@ class AppNavBar extends Component {
         return (
             <div>
                 <Navbar color="dark" dark expand="sm" className="mb-5">
-                    <Container className="col-md-11">
+                    <Container>
                         <Nav>
                             <NavItem>
                                 <Link className="navbar-brand" to="/">

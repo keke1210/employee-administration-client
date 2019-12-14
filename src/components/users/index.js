@@ -1,2 +1,3 @@
 export * from './UserList';
-export * from './UserModal';
+export * from './AddUserModal';
+export * from './EditUserModal';
