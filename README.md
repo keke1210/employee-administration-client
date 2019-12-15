@@ -1,1 +1,1 @@
-### Client application for Employee administration system
+### Client web application (React+Redux) for Employee administration 
