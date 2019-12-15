@@ -101,7 +101,7 @@ export class EditUserModal extends Component {
                                     id="userName"
                                     placeholder="Username"
                                     onChange={this.onChange}
-                                    value={this.state.userData.userName}
+                                    defaultValue={this.state.userData.userName}
                                 />
                                 {submitted && !userData.userName &&
                                     <small className="help-block text-danger">Username is required</small>
@@ -116,7 +116,7 @@ export class EditUserModal extends Component {
                                     id="firstName"
                                     placeholder="First Name"
                                     onChange={this.onChange}
-                                    value={this.state.userData.firstName}
+                                    defaultValue={this.state.userData.firstName}
                                 />
                                 {submitted && !userData.firstName &&
                                     <small className="help-block text-danger">First Name is required</small>
@@ -131,7 +131,7 @@ export class EditUserModal extends Component {
                                     id="lastName"
                                     placeholder="Last Name"
                                     onChange={this.onChange}
-                                    value={this.state.userData.lastName}
+                                    defaultValue={this.state.userData.lastName}
 
                                 />
                                 {submitted && !userData.lastName &&

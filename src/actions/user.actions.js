@@ -71,7 +71,6 @@ function createUser(user) {
             .then(
                 user => {
                     dispatch(addUser(user));
-                    // dispatch(alertActions.success('User crea successful'));
                 },
                 error => {
                     dispatch(failure(error.toString()));

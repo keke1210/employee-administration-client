@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'font-awesome/css/font-awesome.min.css';
 import './App.css';
 import { history, Role } from './_helpers';
 import AppNavBar from './components/layouts/AppNavBar';
@@ -13,7 +12,7 @@ import { PrivateRoute } from './components/common';
 import { UserList } from './components/users';
 import { alertActions } from './actions';
 import { connect } from 'react-redux';
-import { Alert } from 'reactstrap';
+// import { Alert } from 'reactstrap';
 
 
 class App extends Component {
