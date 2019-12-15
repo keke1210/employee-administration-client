@@ -13,6 +13,7 @@ export class UserProfile extends Component {
     state = {
         selectedFile: null,
         binary: null,
+        isSelected: false,
         imagePreviewUrl: null,
         editProfile: false,
         submitted: false,
@@ -33,7 +34,8 @@ export class UserProfile extends Component {
 
     fileSelectedHandler = event => {
         this.setState({
-            selectedFile: event.target.files[0]
+            selectedFile: event.target.files[0],
+            isSelected: true
         });
 
         let reader = new FileReader();
@@ -136,9 +138,11 @@ export class UserProfile extends Component {
                             <div className="photo-container">
                                 {/* <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" className="avatar img-circle img-thumbnail" alt="avatar" /> */}
                                 {$imagePreview}
-                                <Button onClick={this.fileUploadHandler} className="btn-update-img">Update Photo</Button>
                             </div>
                             <Input type='file' className="text-center center-block file-upload" name="file" onChange={this.fileSelectedHandler} />
+                            {this.state.isSelected && <Button onClick={this.fileUploadHandler} style={{ marginTop: '1rem' }} className="btn-update-img">Update Photo</Button>}
+
+
                         </div>
                     </Col>
 
@@ -239,12 +243,12 @@ export class UserProfile extends Component {
                                     <Row xs={1}>
                                         <FormGroup>
                                             <Col>
-                                                <Button
+                                                {editProfile && <Button
                                                     type="submit"
                                                     color="dark"
                                                     style={{ marginTop: '2rem' }}
                                                     block
-                                                >Update Profile</Button>
+                                                >Update Profile</Button>}
                                             </Col>
                                         </FormGroup>
                                     </Row>
@@ -255,144 +259,6 @@ export class UserProfile extends Component {
                     </Col>
 
                 </Row>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-
-                <Row>
-                    <div className="col-md-4">
-                        <div className="profile-img">
-                            <Col sm="12" md={{ size: 6, offset: 3 }}>
-                                {$imagePreview}
-                                <Input type='file' name="file" onChange={this.fileSelectedHandler} />
-                                <Button color="dark" onClick={this.fileUploadHandler} block style={{ marginTop: '1rem' }}>Change photo</Button>
-                            </Col>
-                        </div>
-                    </div>
-                </Row>
-                <br></br>
-
-
-                {!editProfile && <Button onClick={this.handleEditProfileClick}> <FontAwesomeIcon icon={faPen} /> Edit Profile</Button>}
-
-                <Form onSubmit={this.handleSubmit}>
-
-                    <Row form>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Label for="firstName">First Name</Label>
-                                <Input
-                                    type="text"
-                                    id="firstName"
-                                    name="firstName"
-                                    disabled={!editProfile}
-                                    placeholder="First Name"
-                                    onChange={this.handleChange}
-                                    defaultValue={profileData && profileData.firstName}
-                                />
-                            </FormGroup>
-                        </Col>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Label>Last Name</Label>
-                                <Input
-                                    type="text"
-                                    name="lastName"
-                                    disabled={!editProfile}
-                                    placeholder="Last Name"
-                                    onChange={this.handleChange}
-                                    defaultValue={profileData && profileData.lastName}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row form>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Label for="userName">Username</Label>
-                                <Input
-                                    type="text"
-                                    className="form-control"
-                                    id="userName"
-                                    name="userName"
-                                    disabled={!editProfile}
-                                    onChange={this.handleChange}
-                                    placeholder="Username"
-                                    defaultValue={profileData && profileData.userName}
-                                />
-                            </FormGroup>
-
-                        </Col>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Label>Email</Label>
-                                <Input
-                                    type="email"
-                                    name="email"
-                                    disabled={!editProfile}
-                                    placeholder="email@domain.com"
-                                    onChange={this.handleChange}
-                                    defaultValue={profileData && profileData.email}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row form>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Label for="dateOfBirth">Date of birth</Label>
-                                <Input
-                                    type="date"
-                                    name="dateOfBirth"
-                                    id="dateOfBirth"
-                                    disabled={!editProfile}
-                                    placeholder="1997-12-10"
-                                    onChange={this.handleChange}
-                                    defaultValue={profileData && profileData.dateOfBirth !== null ? profileData.dateOfBirth.toString().slice(0, 10) : null}
-                                />
-                            </FormGroup>
-                        </Col>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Label for="phoneNumber">Phone Number</Label>
-                                <Input
-                                    type="text"
-                                    id="phoneNumber"
-                                    name="phoneNumber"
-                                    maxLength={10}
-                                    disabled={!editProfile}
-                                    placeholder="068 xxx xx xx"
-                                    onChange={this.handleChange}
-                                    defaultValue={profileData && profileData.phoneNumber}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </Row>
-
-                    {editProfile && <Button
-                        color="dark"
-                        style={{ marginTop: '2rem' }}
-                        block
-                    >
-                        Update Data</Button>}
-                </Form>
 
             </Container>
 
