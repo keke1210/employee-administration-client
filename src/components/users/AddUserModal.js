@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { userActions } from '../../actions/user.actions';
+import { departmentActions } from '../../actions/department.actions';
 
 import PropTypes from 'prop-types';
 
@@ -24,15 +25,19 @@ class AddUserModal extends Component {
             userName: '',
             role: '',
             password: '',
-            confirmPassword: ''
-        }
-
+            confirmPassword: '',
+            departmentID: ''
+        },
+        isEmployee: true
     }
 
     static propTypes = {
         isAdmin: PropTypes.bool
     };
 
+    componentDidMount() {
+        this.props.getDepartments();
+    }
 
     toggle = () => {
         this.setState({
@@ -52,6 +57,8 @@ class AddUserModal extends Component {
             }
         });
 
+
+
     }
 
     onSubmit = (e) => {
@@ -64,6 +71,7 @@ class AddUserModal extends Component {
             userData.role && userData.password && userData.confirmPassword) {
 
             if (userData.password === userData.confirmPassword) {
+
                 // Add item via addItem action
                 this.props.addUser(userData);
                 this.toggle();
@@ -73,7 +81,9 @@ class AddUserModal extends Component {
 
     render() {
         const { submitted, userData } = this.state;
-        const { buttonLabel } = this.props;
+        const { departments } = this.props;
+
+        console.log(departments);
         return (
             <div>
                 <Button
@@ -152,7 +162,22 @@ class AddUserModal extends Component {
                                 {submitted && !userData.role &&
                                     <small className="help-block text-danger">Role is required</small>
                                 }
+
                             </FormGroup>
+                            {userData.role && userData.role === "Employee" && <FormGroup>
+                                {userData.departmentID && <Label for="departmentID">Department</Label>}
+
+                                {!userData.departmentID && <small for="departmentName" className="text-danger">Please assign a department to this user</small>}
+
+                                <select className={`custom-select`} name="departmentID" id="departmentID" onChange={this.onChange}>
+                                    <option>Select department</option>
+                                    {departments && departments.items &&
+                                        departments.items.map((department, index) => (
+                                            <option key={index} value={department.id}>{department.departmentName}</option>
+                                        ))}
+                                </select>
+
+                            </FormGroup>}
                             <FormGroup>
                                 <Label for="password">Password</Label>
                                 <Input
@@ -202,11 +227,14 @@ class AddUserModal extends Component {
 
 const mapStateToProps = state => ({
     item: state.item,
-    isAdmin: state.authentication.user.isAdmin
+    isAdmin: state.authentication.user.isAdmin,
+    departments: state.departments
+
 });
 
 const actionCreators = {
     addUser: userActions.createUser,
+    getDepartments: departmentActions.getAll
 }
 
 export default connect(mapStateToProps, actionCreators)(AddUserModal);

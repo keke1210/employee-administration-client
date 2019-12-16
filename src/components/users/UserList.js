@@ -12,6 +12,8 @@ import { userActions } from '../../actions/user.actions';
 // import PaginationFooter from '../../components/common/PaginationFooter';
 
 class UserList extends React.Component {
+
+
     componentDidMount() {
         this.props.getUsers();
     }
@@ -31,6 +33,7 @@ class UserList extends React.Component {
                 <Table className="table table-striped" responsive hover>
                     <thead>
                         <tr>
+                            <th>#No.</th>
                             <th>Id</th>
                             <th>Username</th>
                             <th>FirstName</th>
@@ -43,17 +46,18 @@ class UserList extends React.Component {
 
                         {users && users.items && users.items.map((user, index) => (
                             <tr key={user.id}>
+                                <td>{index + 1}</td>
                                 <td>{user.id}</td>
                                 <td>{user.userName}</td>
                                 <td>{user.firstName}</td>
                                 <td>{user.lastName}</td>
                                 <td>{user.role}</td>
-                                <td>
+                                <td className="tightcell">
                                     {/* <Button color="info" className="btn-sm" >
                                         <FontAwesomeIcon icon={faPen} />
                                     </Button> */}
                                     <EditUserModal user={user} />
-                                    &nbsp;
+                                    {' '}
                                     <Button className="btn btn-danger btn-sm" onClick={this.handleDeleteUser(user.id)}>
                                         <FontAwesomeIcon icon={faTrash} />
                                     </Button>

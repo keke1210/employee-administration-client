@@ -1,9 +1,10 @@
-import { authHeader } from '../_helpers';
+import { authHeader, history } from '../_helpers';
 
 export const userService = {
     login,
     logout,
     register,
+    createUser,
     getAll,
     getById,
     update,
@@ -53,6 +54,16 @@ function getById(id) {
     };
 
     return fetch(`https://localhost:44339/api/v1/users/${id}`, requestOptions).then(handleResponse);
+}
+
+function createUser(user) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch(`https://localhost:44339/api/v1/users/createUser`, requestOptions).then(handleResponse);
 }
 
 function register(user) {

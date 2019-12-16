@@ -12,6 +12,9 @@ import { PrivateRoute } from './components/common';
 import { UserList } from './components/users';
 import { alertActions } from './actions';
 import { connect } from 'react-redux';
+import DepartmentsList from './components/departments/DepartmentsList'
+import ProjectsList from './components/projects/ProjectsList'
+import TaskList from './components/tasks/TaskList'
 // import { Alert } from 'reactstrap';
 
 
@@ -59,9 +62,9 @@ class App extends Component {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
                 <PrivateRoute exact path="/users" roles={[Role.Administrator]} component={UserList} />
-                {/* <PrivateRoute exact path="/departments" component={DepartmentList} />
-                <PrivateRoute exact path="/projects" component={ProjectList} />
-                <PrivateRoute exact path="/tasks" component={TaskList} /> */}
+                <PrivateRoute exact path="/departments" component={DepartmentsList} />
+                <PrivateRoute exact path="/projects" component={ProjectsList} />
+                <PrivateRoute exact path="/tasks" component={TaskList} />
                 <PrivateRoute exact path="/profile" component={UserProfile} />
                 <Redirect from="*" to="/" />
               </Switch>

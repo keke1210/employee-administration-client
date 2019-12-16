@@ -1,5 +1,4 @@
-import React, { Component, Fragment } from 'react';
-import axios from 'axios';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { faPen } from '@fortawesome/free-solid-svg-icons';
@@ -50,8 +49,11 @@ export class UserProfile extends Component {
     }
 
     fileUploadHandler = () => {
+        this.setState({
+            isSelected: false
+        })
+
         const fd = new FormData();
-        console.log(this.state)
         fd.append('ProfilePhoto', this.state.selectedFile, this.state.selectedFile.name);
 
         this.props.changeProfilePhoto(fd);
@@ -64,13 +66,14 @@ export class UserProfile extends Component {
     }
 
     handleEditProfileClick = () => {
-        const { profile, user } = this.props;
+        const { profile } = this.props;
         const { profileData } = profile;
+
         this.setState({
             editProfile: true,
             binary: profileData.profilePhoto,
 
-            id: user && user.user && user.user.id,
+            // id: user && user.user && user.user.id,
             userName: profileData.userName,
             firstName: profileData.firstName,
             lastName: profileData.lastName,
@@ -82,6 +85,12 @@ export class UserProfile extends Component {
 
     }
 
+    handleExitEditProfileClick = () => {
+        this.setState({
+            editProfile: false
+        });
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -89,7 +98,7 @@ export class UserProfile extends Component {
 
         // const { userData } = this.state;
         const requestUserData = {
-            id: this.state.id,
+            // id: this.state.id,
             userName: this.state.userName,
             firstName: this.state.firstName,
             lastName: this.state.lastName,
@@ -98,8 +107,6 @@ export class UserProfile extends Component {
             address: this.state.address,
             dateOfBirth: this.state.dateOfBirth
         }
-
-        console.log(requestUserData)
 
         // Action method Update Profile
         this.props.updateProfileData(requestUserData);
@@ -114,12 +121,10 @@ export class UserProfile extends Component {
 
         if (profileData && profileData.profilePhoto) {
             $imagePreview = (<img src={`data:image/jpeg;base64,${profileData.profilePhoto}`} className="avatar img-circle img-thumbnail" alt="icon" />);
-            console.log("binary called")
         }
 
         if (this.state.imagePreviewUrl) {
             $imagePreview = (<img src={this.state.imagePreviewUrl} className="avatar img-circle img-thumbnail" alt="icon" />);
-            console.log("choose file called")
         }
 
 
@@ -129,9 +134,10 @@ export class UserProfile extends Component {
                     <Col sm={9}><h2>User Profile</h2></Col>
                     <Col sm={3}>
                         {!editProfile && <Button style={{ float: "right" }} onClick={this.handleEditProfileClick}> <FontAwesomeIcon icon={faPen} /> Edit Profile</Button>}
+                        {editProfile && <Button title="Cancel profile editing" style={{ float: "right" }} onClick={this.handleExitEditProfileClick}>&times;</Button>}
                     </Col>
                 </Row>
-
+                <br></br>
                 <Row xs={2}>
                     <Col sm={3}>
                         <div className="text-center">

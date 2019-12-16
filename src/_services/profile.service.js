@@ -20,14 +20,13 @@ function getProfileData() {
 
 
 function updateProfile(userData) {
-    const requestOptions = {
-        method: 'PUT',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
-    };
-    console.log(requestOptions.body)
 
-    return fetch(`https://localhost:44339/api/v1/profile/update/${userData.id}`, requestOptions).then(handleResponse);
+    return axios.put('https://localhost:44339/api/v1/profile/update', JSON.stringify(userData), {
+        headers: {
+            ...authHeader(),
+            'Content-Type': 'application/json'
+        }
+    }).then(handleResponse);
 }
 
 function updateProfilePicture(photo) {
@@ -49,7 +48,7 @@ function handleResponse(response) {
         if (!response.ok) {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
-                history.push('/');
+                history.push('/login');
                 window.location.reload(true);
             }
 
