@@ -5,7 +5,8 @@ export const projectService = {
     getAll,
     getById,
     update,
-    delete: _delete
+    delete: _delete,
+    getProjectsTasks
 };
 
 
@@ -25,6 +26,15 @@ function getById(id) {
     };
 
     return fetch(`https://localhost:44339/api/v1/projects/${id}`, requestOptions).then(handleResponse);
+}
+
+function getProjectsTasks(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`https://localhost:44339/api/v1/tasks/getProjectTasks/${id}`, requestOptions).then(handleResponse);
 }
 
 function create(project) {

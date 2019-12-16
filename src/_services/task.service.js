@@ -5,7 +5,8 @@ export const taskServices = {
     getAll,
     getById,
     update,
-    delete: _delete
+    delete: _delete,
+    markTaskAsCompleted
 };
 
 
@@ -55,6 +56,17 @@ function _delete(id) {
     };
 
     return fetch(`https://localhost:44339/api/v1/tasks/delete/${id}`, requestOptions).then(handleResponse);
+}
+
+// prefixed function name with underscore because delete is a reserved word in javascript
+function markTaskAsCompleted(id, completed) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(completed)
+    };
+
+    return fetch(`https://localhost:44339/api/v1/tasks/completeTask/${id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

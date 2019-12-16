@@ -4,6 +4,8 @@ import { Table, Col, Spinner, Row, Button, Form, FormGroup, Label, Input, Contai
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import { history } from '../../_helpers';
+
 import { connect } from 'react-redux';
 import { projectActions } from '../../actions';
 import AddProjectModal from './AddProjectModal'
@@ -18,6 +20,10 @@ export class ProjectsList extends Component {
 
     handleDeleteProject = (id) => {
         return (e) => this.props.deleteProject(id);
+    }
+
+    onDoubleClick = (id) => {
+        return (e) => history.push(`/projects/${id}`);
     }
 
     render() {
@@ -41,7 +47,7 @@ export class ProjectsList extends Component {
                     <tbody>
                         {projects && projects.items && projects.items.map((project, index) =>
                             (
-                                <tr key={project.id}>
+                                <tr key={project.id} onDoubleClick={this.onDoubleClick(project.id)}>
                                     <td>{index + 1}</td>
                                     <td>{project.id}</td>
                                     <td>{project.projectName}</td>

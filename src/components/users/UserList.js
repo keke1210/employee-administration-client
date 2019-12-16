@@ -48,7 +48,7 @@ class UserList extends React.Component {
                             <tr key={user.id}>
                                 <td>{index + 1}</td>
                                 <td>{user.id}</td>
-                                <td>{user.userName}</td>
+                                <td >{user.userName}</td>
                                 <td>{user.firstName}</td>
                                 <td>{user.lastName}</td>
                                 <td>{user.role}</td>

@@ -7,7 +7,8 @@ export const taskActions = {
     createTask,
     updateTask,
     getAll,
-    delete: _delete
+    delete: _delete,
+    markTaskAsCompleted
 };
 
 
@@ -53,6 +54,27 @@ function updateTask(task) {
     function request(task) { return { type: tasksConstants.UPDATE_TASK_REQUEST, task } }
     function success(payload) { return { type: tasksConstants.UPDATE_TASK_SUCCESS, payload } }
     function failure(error) { return { type: tasksConstants.UPDATE_TASK_FAILURE, error } }
+}
+
+function markTaskAsCompleted(id, completed) {
+    return dispatch => {
+        dispatch(request());
+
+        taskServices.markTaskAsCompleted(id, completed)
+            .then(
+                task => {
+                    dispatch(success(task));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(task) { return { type: tasksConstants.COMPLETE_TASK_REQUEST, task } }
+    function success(payload) { return { type: tasksConstants.COMPLETE_TASK_SUCCESS, payload } }
+    function failure(error) { return { type: tasksConstants.COMPLETE_TASK_FAILURE, error } }
 }
 
 

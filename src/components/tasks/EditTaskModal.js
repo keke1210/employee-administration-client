@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react'
 import {
     Button,
     Modal,
@@ -10,21 +10,30 @@ import {
     Input
 } from 'reactstrap';
 import { connect } from 'react-redux';
-import { taskActions, userActions, projectActions } from '../../actions';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CheckBox from '../layouts/CheckBox';
+import { taskActions, userActions, projectActions } from '../../actions';
 
-export class AddTaskModal extends Component {
+
+export class EditTaskModal extends Component {
     state = {
+        rowId: null,
         modal: false,
         submitted: false,
         checked: false,
         taskData: {
+            id: '',
             taskName: '',
             description: '',
-            completed: false,
-            projectId: '',
-            userId: ''
+            completed: ''
         }
+
+    }
+
+    componentDidMount() {
+        this.props.getProjects();
+        this.props.getUsers();
     }
 
     handleCheckboxChange = event => {
@@ -32,21 +41,17 @@ export class AddTaskModal extends Component {
     }
 
 
-    componentDidMount() {
-        this.props.getProjects();
-        this.props.getUsers();
-    }
-
     toggle = () => {
+        const { task } = this.props;
         this.setState({
             modal: !this.state.modal,
             submitted: false,
+            checked: task.completed,
             taskData: {
-                taskName: '',
-                description: '',
-                completed: false,
-                projectId: '',
-                userId: ''
+                id: task.id,
+                taskName: task.taskName,
+                description: task.description,
+                completed: task.completed
             }
         });
     }
@@ -65,73 +70,59 @@ export class AddTaskModal extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.setState({
-            submitted: true
-        });
-
-
+        this.setState({ submitted: true });
         const { taskData } = this.state;
-        const { user } = this.props;
-        if (taskData && taskData.taskName && taskData.description
-            && taskData.projectId) {
-
-            if (!user.isAdmin) {
-                taskData.userId = user.user.id;
-            }
-
-            this.props.addTask(taskData);
+        if (taskData.taskName) {
+            // Add item via addItem action
+            this.props.updateTask(taskData);
             this.toggle();
         }
     }
     render() {
         const { submitted, taskData } = this.state;
-        const { users, projects, user } = this.props;
-        console.log(user)
+        const { users, projects } = this.props;
+
         return (
-            <div>
-                <Button
-                    color='dark'
-                    style={{ marginBottom: '2rem' }}
-                    onClick={this.toggle}
-                >
-                    Add Task
+            <Fragment>
+                <Button color="info" className="btn-sm" onClick={this.toggle} >
+                    <FontAwesomeIcon icon={faPen} />
                 </Button>
+
                 <Modal
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                 >
-                    <ModalHeader toggle={this.toggle}>
-                        Add Task
-                    </ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Edit Task</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
                                 <Label for="taskName">Task Name</Label>
-
                                 <Input
-                                    className={submitted && taskData && !taskData.taskName ? 'is-invalid' : ''}
+                                    className={submitted && !taskData.departmentName ? 'is-invalid' : ''}
                                     type="text"
                                     name="taskName"
                                     id="taskName"
-                                    placeholder="Task Name"
+                                    placeholder="Department Name"
                                     onChange={this.onChange}
+                                    defaultValue={this.state.taskData.taskName}
                                 />
-                                {submitted && taskData && !taskData.taskName &&
+                                {submitted && !taskData.taskName &&
                                     <small className="help-block text-danger">Task Name is required</small>
                                 }
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="taskName">Description</Label>
 
+                            <FormGroup>
+                                <Label for="description">Description</Label>
                                 <Input
-                                    className={submitted && taskData && !taskData.description ? 'is-invalid' : ''}
+                                    className={submitted && !taskData.description ? 'is-invalid' : ''}
                                     type="text"
                                     name="description"
                                     id="description"
                                     placeholder="Description"
                                     onChange={this.onChange}
+                                    defaultValue={this.state.taskData.description}
                                 />
-                                {submitted && taskData && !taskData.description &&
+                                {submitted && !taskData.description &&
                                     <small className="help-block text-danger">Description is required</small>
                                 }
                             </FormGroup>
@@ -147,8 +138,7 @@ export class AddTaskModal extends Component {
                                 </select>
 
                             </FormGroup>
-
-                            {user.isAdmin && <FormGroup>
+                            <FormGroup>
                                 <Label for="taskName">User</Label>
                                 <select className={`custom-select`} name="userId" id="departmentID" onChange={this.onChange}>
                                     <option>Select user</option>
@@ -157,42 +147,44 @@ export class AddTaskModal extends Component {
                                             <option key={index} value={user.id}>{user.userName}</option>
                                         ))}
                                 </select>
-
-                            </FormGroup>}
-                            {/* <FormGroup style={{ fontFamily: 'system-ui' }}>
+                            </FormGroup>
+                            <br></br>
+                            <FormGroup style={{ fontFamily: 'system-ui' }}>
                                 <label>
                                     <CheckBox
                                         id="checkbox"
                                         checked={this.state.checked}
                                         onChange={this.handleCheckboxChange}
                                     />
-                                    <span style={{ marginLeft: 18 }}>Complete</span>
+                                    <span style={{ marginLeft: 18 }}>Completed</span>
                                 </label>
-                            </FormGroup> */}
+                            </FormGroup>
                             <FormGroup>
                                 <Button
                                     color="dark"
                                     style={{ marginTop: '2rem' }}
                                     block
-                                >Add</Button>
+                                >Edit</Button>
                             </FormGroup>
                         </Form>
                     </ModalBody>
+
                 </Modal>
-            </div>
+            </Fragment>
         )
     }
 }
 
 const mapStateToProps = state => ({
     users: state.users,
-    projects: state.projects,
-    user: state.authentication.user
-})
+    projects: state.projects
+});
+
 const actionCreators = {
+    updateTask: taskActions.updateTask,
     getUsers: userActions.getAll,
     getProjects: projectActions.getAll,
-    addTask: taskActions.createTask
 }
 
-export default connect(mapStateToProps, actionCreators)(AddTaskModal)
+
+export default connect(mapStateToProps, actionCreators)(EditTaskModal);

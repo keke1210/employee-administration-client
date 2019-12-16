@@ -77,8 +77,6 @@ export class EditDepatmentModal extends Component {
                     <ModalBody>
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                <Label for="departmentName">Department Name</Label>
-
                                 <Label for="userName">Department Name</Label>
                                 <Input
                                     className={submitted && !departmentData.departmentName ? 'is-invalid' : ''}

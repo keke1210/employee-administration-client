@@ -70,6 +70,27 @@ export function tasks(state = {}, action) {
 
 
 
+
+        case tasksConstants.COMPLETE_TASK_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case tasksConstants.COMPLETE_TASK_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                task: action.payload
+            };
+        case tasksConstants.COMPLETE_TASK_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            };
+
+
+
         case tasksConstants.DELETE_REQUEST:
             return {
                 ...state,

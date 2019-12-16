@@ -7,9 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux';
 import { taskActions } from '../../actions';
 import AddTaskModal from './AddTaskModal'
-// import EditDepatmentModal from './EditDepatmentModal';
+import EditTaskModal from './EditTaskModal';
+import CompleteTaskComponent from './CompleteTaskComponent';
 
 export class TaskList extends Component {
+
+
     componentDidMount() {
         this.props.getTasks();
     }
@@ -19,7 +22,6 @@ export class TaskList extends Component {
     }
     render() {
         const { tasks } = this.props;
-        console.log(tasks)
         return (
             <Fragment>
                 <h2>Tasks</h2>
@@ -32,6 +34,7 @@ export class TaskList extends Component {
                             <th>Task Name</th>
                             <th>Description></th>
                             <th>Completed</th>
+                            {/* <th>Complete task</th> */}
                             <th></th>
                         </tr>
                     </thead>
@@ -43,10 +46,11 @@ export class TaskList extends Component {
                                     <td>{task.id}</td>
                                     <td>{task.taskName}</td>
                                     <td>{task.description}</td>
-                                    <td>{task.completed ? 'Yes' : 'No'}</td>
+                                    {/* <td>{task.completed ? 'Yes' : 'No'}</td> */}
+                                    <td><CompleteTaskComponent task={task} /> </td>
                                     <td className="tightcell">
                                         {' '}
-                                        {/* <EditDepatmentModal task={task} /> &nbsp; */}
+                                        <EditTaskModal task={task} /> &nbsp;
                                         <Button className="btn btn-danger btn-sm" onClick={this.handleDeleteTask(task.id)}>
                                             <FontAwesomeIcon icon={faTrash} />
                                         </Button>
@@ -57,7 +61,7 @@ export class TaskList extends Component {
                     </tbody>
 
                 </Table>
-                {/* {departments.loading && <Spinner type="grow" color="dark" />} */}
+                {tasks.loading && <Spinner type="grow" color="dark" />}
 
             </Fragment>
         )
@@ -67,7 +71,8 @@ export class TaskList extends Component {
 
 
 const mapStateToProps = state => ({
-    tasks: state.tasks
+    tasks: state.tasks,
+    task: state.task
 });
 
 const actionCreators = {

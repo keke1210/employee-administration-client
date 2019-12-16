@@ -6,10 +6,6 @@ import {
     Nav,
     NavItem,
     Container,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Role } from '../../_helpers';
@@ -34,25 +30,25 @@ class AppNavBar extends Component {
                     {user && user.role === Role.Administrator &&
                         <Fragment>
                             <NavItem>
-                                <Link to="/users" style={{ textDecoration: 'none', color: 'white' }}>Users&nbsp;&nbsp;</Link>
+                                <Link to="/users" style={{ textDecoration: 'none', color: 'white' }}>Users&nbsp;&nbsp;&nbsp;&nbsp;</Link>
                             </NavItem>
                         </Fragment>
                     }
                     <NavItem>
-                        <Link to="/departments" style={{ textDecoration: 'none', color: 'white' }}>Departments&nbsp;&nbsp;</Link>
+                        <Link to="/departments" style={{ textDecoration: 'none', color: 'white' }}>Departments&nbsp;&nbsp;&nbsp;&nbsp;</Link>
                     </NavItem>
                     <NavItem>
-                        <Link to="/projects" style={{ textDecoration: 'none', color: 'white' }}>Projects&nbsp;&nbsp;</Link>
+                        <Link to="/projects" style={{ textDecoration: 'none', color: 'white' }}>Projects&nbsp;&nbsp;&nbsp;&nbsp;</Link>
                     </NavItem>
                     <NavItem>
-                        <Link to="/tasks" style={{ textDecoration: 'none', color: 'white' }}>Tasks</Link>
+                        <Link to="/tasks" style={{ textDecoration: 'none', color: 'white' }}>Tasks&nbsp;&nbsp;&nbsp;&nbsp;</Link>
                     </NavItem>
                 </Nav>
 
 
                 <Nav className="ml-auto" navbar>
                     <NavItem>
-                        <Link to="/profile" style={{ textDecoration: 'none', color: 'white' }}>{`Hello ${user && user.userName}`}&nbsp;&nbsp;&nbsp;&nbsp;</Link>
+                        <Link to="/profile" style={{ textDecoration: 'none', color: 'white' }}>{`${user && user.userName}`}&nbsp;&nbsp;&nbsp;&nbsp;</Link>
                     </NavItem>
                     <NavItem>
                         <Link to="/login" style={{ textDecoration: 'none', color: 'grey' }} >Logout</Link>

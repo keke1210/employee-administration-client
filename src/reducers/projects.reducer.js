@@ -20,6 +20,23 @@ export function projects(state = {}, action) {
             };
 
 
+        case projectsConstants.GETALL_TASKS_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case projectsConstants.GETALL_TASKS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                items: action.payload,
+            }
+        case projectsConstants.GETALL_TASKS_FAILURE:
+            return {
+                loading: false,
+                error: action.error
+            };
+
 
         case projectsConstants.CREATE_PROJECT_REQUEST:
             return {
