@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Col, Spinner, Row, Button, Form, FormGroup, Label, Input, Container } from 'reactstrap';
+import { Table } from 'reactstrap';
 
 import { connect } from 'react-redux';
-import { taskActions, projectActions } from '../../actions';
+import { projectActions } from '../../actions';
 
 export class ProjectTasks extends Component {
     componentDidMount() {

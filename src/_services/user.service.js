@@ -8,7 +8,8 @@ export const userService = {
     getAll,
     getById,
     update,
-    delete: _delete
+    delete: _delete,
+    getPrevNextUsers
 };
 
 
@@ -46,6 +47,19 @@ function getAll() {
 
     return fetch(`https://localhost:44339/api/v1/users`, requestOptions).then(handleResponse);
 }
+
+function getPrevNextUsers(url) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    if (!url) {
+        return fetch(`https://localhost:44339/api/v1/users`, requestOptions).then(handleResponse);
+    }
+    return fetch(url, requestOptions).then(handleResponse);
+}
+
+
 
 function getById(id) {
     const requestOptions = {

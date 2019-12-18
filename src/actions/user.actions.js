@@ -10,7 +10,8 @@ export const userActions = {
     getAll,
     createUser,
     updateUser,
-    delete: _delete
+    delete: _delete,
+    getPrevNextUsers
 };
 
 function login(username, password) {
@@ -116,7 +117,7 @@ function getAll() {
                 users => dispatch(success(users)),
                 error => {
                     dispatch(failure(error.toString()));
-                    dispatch(alertActions.error("Error: Failed to fetch the data!"));
+                    dispatch(alertActions.error("Failed to fetch the data!"));
                 }
             );
     };
@@ -125,6 +126,27 @@ function getAll() {
     function success(users) { return { type: userConstants.GETALL_SUCCESS, users } }
     function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
 }
+
+function getPrevNextUsers(uri) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getPrevNextUsers(uri)
+            .then(
+                users => dispatch(success(users)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Failed to fetch the data!"));
+                }
+            );
+    };
+
+    function request() { return { type: userConstants.GETALL_REQUEST } }
+    function success(users) { return { type: userConstants.GETALL_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
+}
+
+
 
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {

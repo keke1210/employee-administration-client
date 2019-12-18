@@ -25,7 +25,9 @@ const PaginationFooter = ({ items, ...rest }) => {
                 <PaginationItem>
                     <PaginationLink previous href="#" />
                 </PaginationItem>
-                {testFunc}
+                <PaginationLink href="#">
+                    1
+                </PaginationLink>
                 <PaginationItem>
                     <PaginationLink next href="#" />
                 </PaginationItem>

@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { departmentActions } from '../../actions/department.actions';
+import PropTypes from 'prop-types';
 
 
 export class AddDepartmentModal extends Component {
@@ -21,6 +22,11 @@ export class AddDepartmentModal extends Component {
             departmentName: ''
         }
     }
+
+    static propTypes = {
+        isAuthenticated: PropTypes.bool.isRequired
+    }
+
 
     toggle = () => {
         this.setState({
@@ -111,7 +117,7 @@ export class AddDepartmentModal extends Component {
 }
 
 const mapStateToProps = state => ({
-
+    isAuthenticated: state.authentication.isAuthenticated
 })
 const actionCreators = {
     addDepartment: departmentActions.createDepartment

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Col, Spinner, Row, Button, Form, FormGroup, Label, Input, Container } from 'reactstrap';
+import { Table, Spinner, Button } from 'reactstrap';
 
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
