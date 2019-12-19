@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 
 import { connect } from 'react-redux';
-import { Spinner, Button, Table, Pagination } from 'reactstrap';
+import { Spinner, Button, Table, Input, InputGroupAddon, InputGroup } from 'reactstrap';
 import AddUserModal from './AddUserModal';
 import EditUserModal from './EditUserModal';
 
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { userActions } from '../../actions/user.actions';
@@ -17,8 +17,14 @@ class UserList extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            searchText: '',
+            pageSize: 5,
+            currentUrl: 'https://localhost:44339/api/v1/users?',
+            currentPage: 1
+        }
+
         this.onClickPageLink = this.onClickPageLink.bind(this);
-        this.onClickNextPage = this.onClickNextPage.bind(this);
     }
 
     componentDidMount() {
@@ -29,15 +35,45 @@ class UserList extends React.Component {
         return (e) => this.props.deleteUser(id);
     }
 
-    onClickNextPage(uri) {
+    onClickNextPage = (uri, next) => {
+        return (e) => {
+            console.log(next)
 
-        return (e) => this.props.getPrevNextUsers(uri);
+            this.setState({
+                currentUrl: uri,
+                currentPage: next === true ? this.state.currentPage + 1 : this.state.currentPage - 1
+            });
+            this.props.getPrevNextUsers(`${uri}&searchText=${this.state.searchText}`);
+        }
     }
 
-    onClickPageLink(pageNumber) {
-        return (e) => this.props.getPrevNextUsers(`https://localhost:44339/api/v1/users?pageNumber=${pageNumber}`);
+    onClickPageLink = (pageNumber) => {
+        return (e) => {
+            this.setState({
+                currentPage: pageNumber
+            });
+
+            this.props.getPrevNextUsers(`https://localhost:44339/api/v1/users?pageNumber=${pageNumber}&pageSize=${this.state.pageSize}&searchText=${this.state.searchText}`);
+        }
     }
 
+    onChange = (event) => {
+        // console.log(event.target.name)
+        this.setState({
+            [event.target.name]: [event.target.value],
+            currentUrl: `https://localhost:44339/api/v1/users?searchText=${event.target.value}&pageSize=${this.state.pageSize}`
+        });
+
+        this.props.getPrevNextUsers(`https://localhost:44339/api/v1/users?searchText=${event.target.value}&pageSize=${this.state.pageSize}`);
+    }
+
+    onChangeDropDown = (event) => {
+        this.setState({
+            pageSize: [event.target.value],
+        });
+        console.log(event.target.value)
+        this.props.getPrevNextUsers(`https://localhost:44339/api/v1/users?pageSize=${event.target.value}&searchText=${this.state.searchText}`);
+    }
 
     render() {
         const { users } = this.props;
@@ -45,14 +81,30 @@ class UserList extends React.Component {
         console.log(users);
         return (
             <Fragment>
-                <h2>Users</h2>
-                <AddUserModal buttonLabel="Edit" />
-                {/* <EditUserModal /> */}
+                <div className="container">
+                    <div className="row">
+                        <div className="col">
+                            <h2>Users</h2>
+                            <AddUserModal buttonLabel="Edit" />
+                        </div>
+                        <div className="col">
+                            <Input
+                                className="col-md-6"
+                                style={{ float: "right", marginTop: "4rem" }}
+                                type="text" name="searchText"
+                                onChange={this.onChange}
+                                placeholder="Search"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+
                 <Table className="table table-striped" responsive hover>
                     <thead>
                         <tr>
                             <th>#No.</th>
-                            <th>Id</th>
+                            {/* <th>Id</th> */}
                             <th>Username</th>
                             <th>FirstName</th>
                             <th>LastName</th>
@@ -65,7 +117,7 @@ class UserList extends React.Component {
                         {users && users.items && users.items.data && users.items.data.map((user, index) => (
                             <tr key={user.id}>
                                 <td>{index + 1}</td>
-                                <td>{user.id}</td>
+                                {/* <td>{user.id}</td> */}
                                 <td >{user.userName}</td>
                                 <td>{user.firstName}</td>
                                 <td>{user.lastName}</td>
@@ -86,15 +138,20 @@ class UserList extends React.Component {
                 </Table>
                 {users.loading && <Spinner type="grow" color="dark" />}
                 <PaginationHelper users={users && users.items}
-                    onClickNextPage={this.onClickNextPage(users && users.items && users.items.nextPage)}
-                    onClickPrevPage={this.onClickNextPage(users && users.items && users.items.previousPage)}
+                    onClickNextPage={this.onClickNextPage(users && users.items && users.items.nextPage, true)}
+                    onClickPrevPage={this.onClickNextPage(users && users.items && users.items.previousPage, false)}
                     onClickPageLink={this.onClickPageLink}
+                    currentPage={this.state.currentPage}
                 />
-                {/* <PaginationFooter items={users} /> */}
+
+                <select className="custom-select col-md-3" name="pageSize" onChange={this.onChangeDropDown}>
+                    <option>Page Size</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
             </Fragment >
-
-
-
         );
     }
 }

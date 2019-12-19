@@ -56,9 +56,6 @@ class AddUserModal extends Component {
                 [name]: value
             }
         });
-
-
-
     }
 
     onSubmit = (e) => {
