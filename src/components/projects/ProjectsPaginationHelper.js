@@ -1,11 +1,12 @@
 import React from 'react'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
-const PaginationHelper = ({ users, onClickNextPage, onClickPageLink, onClickPrevPage, currentPage }) => {
-    const pageNumbers = [];
-    let totalPg = users && users.totalPages;
+const ProjectsPaginationHelper = ({ projects, onClickNextPage, onClickPageLink, onClickPrevPage, currentPage }) => {
 
-    if ((users && users.data && users.data.length !== 0) && totalPg !== 1) {
+    const pageNumbers = [];
+    let totalPg = projects && projects.totalPages;
+
+    if ((projects && projects.data && projects.data.length !== 0) && totalPg !== 1) {
         for (let i = 1; i <= totalPg; i++) {
 
             pageNumbers.push(<PaginationItem key={i} active={i === currentPage ? true : false}>
@@ -20,13 +21,13 @@ const PaginationHelper = ({ users, onClickNextPage, onClickPageLink, onClickPrev
     return (
         <div style={{ float: "right" }}>
             <Pagination aria-label="Page navigation example">
-                <PaginationItem disabled={users && users.previousPage === null ? true : false}>
+                <PaginationItem disabled={projects && projects.previousPage === null ? true : false}>
                     <PaginationLink previous href="#" onClick={onClickPrevPage} />
                 </PaginationItem>
 
                 {pageNumbers}
 
-                <PaginationItem disabled={users && users.nextPage === null ? true : false}>
+                <PaginationItem disabled={projects && projects.nextPage === null ? true : false}>
                     <PaginationLink next href="#" onClick={onClickNextPage} />
                 </PaginationItem>
             </Pagination>
@@ -35,4 +36,4 @@ const PaginationHelper = ({ users, onClickNextPage, onClickPageLink, onClickPrev
     )
 }
 
-export default PaginationHelper
+export default ProjectsPaginationHelper;

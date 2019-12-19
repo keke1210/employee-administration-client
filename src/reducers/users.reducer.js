@@ -19,6 +19,8 @@ export function users(state = {}, action) {
                 error: action.error
             };
 
+
+
         case userConstants.CREATE_USER_REQUEST:
             return {
                 ...state,
@@ -28,7 +30,7 @@ export function users(state = {}, action) {
             return {
                 ...state,
                 loading: false,
-                items: [...state.items, action.payload]
+                items: [action.payload, ...state.items]
             };
         case userConstants.CREATE_USER_FAILURE:
             return {
@@ -36,6 +38,8 @@ export function users(state = {}, action) {
                 loading: false,
                 error: action.error
             };
+
+
         case userConstants.UPDATE_USER_REQUEST:
             return {
                 ...state,
@@ -62,6 +66,9 @@ export function users(state = {}, action) {
                 loading: false,
                 error: action.error
             };
+
+
+
         case userConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted
             return {

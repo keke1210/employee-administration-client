@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { departmentActions } from '../../actions/department.actions';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 
 export class AddDepartmentModal extends Component {
@@ -23,9 +23,9 @@ export class AddDepartmentModal extends Component {
         }
     }
 
-    static propTypes = {
-        isAuthenticated: PropTypes.bool.isRequired
-    }
+    // static propTypes = {
+    //     isAuthenticated: PropTypes.bool.isRequired
+    // }
 
 
     toggle = () => {

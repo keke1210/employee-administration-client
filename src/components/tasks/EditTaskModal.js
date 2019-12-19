@@ -127,7 +127,7 @@ export class EditTaskModal extends Component {
                                 }
                             </FormGroup>
 
-                            <FormGroup>
+                            {/* <FormGroup>
                                 <Label for="taskName">Project</Label>
                                 <select className={`custom-select`} name="projectId" id="departmentID" onChange={this.onChange}>
                                     <option>Select project</option>
@@ -147,7 +147,7 @@ export class EditTaskModal extends Component {
                                             <option key={index} value={user.id}>{user.userName}</option>
                                         ))}
                                 </select>
-                            </FormGroup>
+                            </FormGroup> */}
                             <br></br>
                             <FormGroup style={{ fontFamily: 'system-ui' }}>
                                 <label>

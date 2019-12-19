@@ -8,7 +8,8 @@ export const projectActions = {
     updateProject,
     getAll,
     delete: _delete,
-    getProjectTasks
+    getProjectTasks,
+    getPrevNextProjects
 };
 
 
@@ -75,6 +76,26 @@ function getAll() {
     function success(projects) { return { type: projectsConstants.GETALL_SUCCESS, projects } }
     function failure(error) { return { type: projectsConstants.GETALL_FAILURE, error } }
 }
+
+function getPrevNextProjects(uri) {
+    return dispatch => {
+        dispatch(request());
+
+        projectService.getPrevNextProjects(uri)
+            .then(
+                users => dispatch(success(users)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Failed to fetch the data!"));
+                }
+            );
+    };
+
+    function request() { return { type: projectsConstants.GETALL_REQUEST } }
+    function success(projects) { return { type: projectsConstants.GETALL_SUCCESS, projects } }
+    function failure(error) { return { type: projectsConstants.GETALL_FAILURE, error } }
+}
+
 
 function getProjectTasks(id) {
     return dispatch => {

@@ -44,7 +44,6 @@ function getAll() {
         headers: authHeader()
     };
 
-
     return fetch(`https://localhost:44339/api/v1/users`, requestOptions).then(handleResponse);
 }
 

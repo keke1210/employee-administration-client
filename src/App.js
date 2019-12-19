@@ -72,6 +72,9 @@ class App extends Component {
                 <Redirect from="*" to="/" />
               </Switch>
             </div>
+            <footer className="container">
+              <p>© Company 2017-2018 </p>
+            </footer>
           </Fragment>
         </Router>
       </Fragment>

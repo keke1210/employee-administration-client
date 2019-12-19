@@ -6,7 +6,8 @@ export const taskServices = {
     getById,
     update,
     delete: _delete,
-    markTaskAsCompleted
+    markTaskAsCompleted,
+    getPrevNextTasks
 };
 
 
@@ -17,6 +18,17 @@ function getAll() {
     };
 
     return fetch(`https://localhost:44339/api/v1/tasks/getall`, requestOptions).then(handleResponse);
+}
+
+function getPrevNextTasks(url) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    if (!url) {
+        return fetch(`https://localhost:44339/api/v1/tasks/getall`, requestOptions).then(handleResponse);
+    }
+    return fetch(url, requestOptions).then(handleResponse);
 }
 
 function getById(id) {

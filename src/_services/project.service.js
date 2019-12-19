@@ -6,7 +6,8 @@ export const projectService = {
     getById,
     update,
     delete: _delete,
-    getProjectsTasks
+    getProjectsTasks,
+    getPrevNextProjects
 };
 
 
@@ -18,6 +19,18 @@ function getAll() {
 
     return fetch(`https://localhost:44339/api/v1/projects/getall`, requestOptions).then(handleResponse);
 }
+
+function getPrevNextProjects(url) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    if (!url) {
+        return fetch(`https://localhost:44339/api/v1/projects/getall`, requestOptions).then(handleResponse);
+    }
+    return fetch(url, requestOptions).then(handleResponse);
+}
+
 
 function getById(id) {
     const requestOptions = {

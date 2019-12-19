@@ -136,7 +136,7 @@ export class AddTaskModal extends Component {
                                 }
                             </FormGroup>
 
-                            <FormGroup>
+                            {/* <FormGroup>
                                 <Label for="taskName">Project</Label>
                                 <select className={`custom-select`} name="projectId" id="departmentID" onChange={this.onChange}>
                                     <option>Select project</option>
@@ -146,9 +146,9 @@ export class AddTaskModal extends Component {
                                         ))}
                                 </select>
 
-                            </FormGroup>
+                            </FormGroup> */}
 
-                            {user.isAdmin && <FormGroup>
+                            {/* {user.isAdmin && <FormGroup>
                                 <Label for="taskName">User</Label>
                                 <select className={`custom-select`} name="userId" id="departmentID" onChange={this.onChange}>
                                     <option>Select user</option>
@@ -158,7 +158,9 @@ export class AddTaskModal extends Component {
                                         ))}
                                 </select>
 
-                            </FormGroup>}
+                            </FormGroup>} */}
+
+
                             {/* <FormGroup style={{ fontFamily: 'system-ui' }}>
                                 <label>
                                     <CheckBox

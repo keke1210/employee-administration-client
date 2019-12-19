@@ -7,7 +7,8 @@ export const departmentActions = {
     createDepartment,
     updateDepartment,
     getAll,
-    delete: _delete
+    delete: _delete,
+    getPrevNextDepartments
 };
 
 
@@ -61,6 +62,25 @@ function getAll() {
         dispatch(request());
 
         departmentService.getAll()
+            .then(
+                departments => dispatch(success(departments)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Error: Failed to fetch the data!"));
+                }
+            );
+    };
+
+    function request() { return { type: departmentsConstants.GETALL_REQUEST } }
+    function success(departments) { return { type: departmentsConstants.GETALL_SUCCESS, departments } }
+    function failure(error) { return { type: departmentsConstants.GETALL_FAILURE, error } }
+}
+
+function getPrevNextDepartments(url) {
+    return dispatch => {
+        dispatch(request());
+
+        departmentService.getPrevNextDepartments(url)
             .then(
                 departments => dispatch(success(departments)),
                 error => {

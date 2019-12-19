@@ -30,7 +30,7 @@ export function departments(state = {}, action) {
             return {
                 ...state,
                 loading: false,
-                items: [...state.items, action.payload]
+                items: [action.payload, ...state.items]
             }
         case departmentsConstants.CREATE_DEPARTMENT_FAILURE:
             return {

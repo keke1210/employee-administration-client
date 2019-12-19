@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
-const PaginationHelper = ({ users, onClickNextPage, onClickPageLink, onClickPrevPage, currentPage }) => {
+const UsersPaginationHelper = ({ users, onClickNextPage, onClickPageLink, onClickPrevPage, currentPage }) => {
     const pageNumbers = [];
     let totalPg = users && users.totalPages;
 
@@ -35,4 +35,4 @@ const PaginationHelper = ({ users, onClickNextPage, onClickPageLink, onClickPrev
     )
 }
 
-export default PaginationHelper
+export default UsersPaginationHelper;

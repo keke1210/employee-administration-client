@@ -194,7 +194,7 @@ export class UserProfile extends Component {
                                                     className="form-control"
                                                     id="userName"
                                                     name="userName"
-                                                    disabled={!editProfile}
+                                                    disabled={true}
                                                     onChange={this.handleChange}
                                                     placeholder="Username"
                                                     defaultValue={profileData && profileData.userName}
@@ -239,7 +239,7 @@ export class UserProfile extends Component {
                                                     name="phoneNumber"
                                                     maxLength={10}
                                                     disabled={!editProfile}
-                                                    placeholder="068 xxx xx xx"
+                                                    placeholder="06x xxx xx xx"
                                                     onChange={this.handleChange}
                                                     defaultValue={profileData && profileData.phoneNumber}
                                                 />

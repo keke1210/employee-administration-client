@@ -104,7 +104,7 @@ export class AddProjectModal extends Component {
                                     <small className="help-block text-danger">Project Name is required</small>
                                 }
                             </FormGroup>
-                            <FormGroup>
+                            {/* <FormGroup>
                                 <Label for="departmentName">Department</Label>
                                 <select className={`custom-select`} name="departmentID" onChange={this.onChange}>
                                     <option>Select department</option>
@@ -113,7 +113,7 @@ export class AddProjectModal extends Component {
                                             <option key={index} value={department.id}>{department.departmentName}</option>
                                         ))}
                                 </select>
-                            </FormGroup>
+                            </FormGroup> */}
 
 
                             <FormGroup>

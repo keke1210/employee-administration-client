@@ -5,7 +5,8 @@ export const departmentService = {
     getAll,
     getById,
     update,
-    delete: _delete
+    delete: _delete,
+    getPrevNextDepartments
 };
 
 
@@ -37,6 +38,18 @@ function create(departmentRequest) {
     return fetch(`https://localhost:44339/api/v1/departments/create`, requestOptions).then(handleResponse);
 }
 
+function getPrevNextDepartments(url) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    if (!url) {
+        return fetch(`https://localhost:44339/api/v1/departments/getall`, requestOptions).then(handleResponse);
+    }
+    return fetch(url, requestOptions).then(handleResponse);
+}
+
+
 function update(departmentRequest) {
     const requestOptions = {
         method: 'PUT',
@@ -64,8 +77,8 @@ function handleResponse(response) {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
                 // logout();
-                // history.push('/login');
-                // window.location.reload(true);
+                history.push('/login');
+                window.location.reload(true);
             }
 
             const error = (data && data.message) || response.statusText;

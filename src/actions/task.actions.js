@@ -8,7 +8,8 @@ export const taskActions = {
     updateTask,
     getAll,
     delete: _delete,
-    markTaskAsCompleted
+    markTaskAsCompleted,
+    getPrevNextTasks
 };
 
 
@@ -83,6 +84,25 @@ function getAll() {
         dispatch(request());
 
         taskServices.getAll()
+            .then(
+                tasks => dispatch(success(tasks)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Error: Failed to fetch the data!"));
+                }
+            );
+    };
+
+    function request() { return { type: tasksConstants.GETALL_REQUEST } }
+    function success(tasks) { return { type: tasksConstants.GETALL_SUCCESS, tasks } }
+    function failure(error) { return { type: tasksConstants.GETALL_FAILURE, error } }
+}
+
+function getPrevNextTasks(url) {
+    return dispatch => {
+        dispatch(request());
+
+        taskServices.getPrevNextTasks(url)
             .then(
                 tasks => dispatch(success(tasks)),
                 error => {

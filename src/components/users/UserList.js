@@ -1,16 +1,15 @@
 import React, { Fragment } from 'react';
 
 import { connect } from 'react-redux';
-import { Spinner, Button, Table, Input, InputGroupAddon, InputGroup } from 'reactstrap';
+import { Spinner, Button, Table, Input } from 'reactstrap';
 import AddUserModal from './AddUserModal';
 import EditUserModal from './EditUserModal';
 
-import { faTrash, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { userActions } from '../../actions/user.actions';
-//  import PaginationFooter from '../../components/common/PaginationFooter';
-import PaginationHelper from '../../components/layouts/PaginationHelper';
+import UsersPaginationHelper from './UsersPaginationHelper';
 
 
 class UserList extends React.Component {
@@ -20,7 +19,7 @@ class UserList extends React.Component {
         this.state = {
             searchText: '',
             pageSize: 5,
-            currentUrl: 'https://localhost:44339/api/v1/users?',
+            baseUrl: 'https://localhost:44339/api/v1/users?',
             currentPage: 1
         }
 
@@ -37,10 +36,7 @@ class UserList extends React.Component {
 
     onClickNextPage = (uri, next) => {
         return (e) => {
-            console.log(next)
-
             this.setState({
-                currentUrl: uri,
                 currentPage: next === true ? this.state.currentPage + 1 : this.state.currentPage - 1
             });
             this.props.getPrevNextUsers(`${uri}&searchText=${this.state.searchText}`);
@@ -53,26 +49,31 @@ class UserList extends React.Component {
                 currentPage: pageNumber
             });
 
-            this.props.getPrevNextUsers(`https://localhost:44339/api/v1/users?pageNumber=${pageNumber}&pageSize=${this.state.pageSize}&searchText=${this.state.searchText}`);
+            this.props.getPrevNextUsers(`${this.state.baseUrl}pageNumber=${pageNumber}&pageSize=${this.state.pageSize}&searchText=${this.state.searchText}`);
         }
     }
 
-    onChange = (event) => {
-        // console.log(event.target.name)
+    onChangeSearchText = (event) => {
         this.setState({
-            [event.target.name]: [event.target.value],
-            currentUrl: `https://localhost:44339/api/v1/users?searchText=${event.target.value}&pageSize=${this.state.pageSize}`
+            searchText: [event.target.value],
         });
 
-        this.props.getPrevNextUsers(`https://localhost:44339/api/v1/users?searchText=${event.target.value}&pageSize=${this.state.pageSize}`);
+        this.props.getPrevNextUsers(`${this.state.baseUrl}searchText=${event.target.value}&pageSize=${this.state.pageSize}`);
     }
 
     onChangeDropDown = (event) => {
-        this.setState({
-            pageSize: [event.target.value],
-        });
-        console.log(event.target.value)
-        this.props.getPrevNextUsers(`https://localhost:44339/api/v1/users?pageSize=${event.target.value}&searchText=${this.state.searchText}`);
+
+
+        console.log(typeof (event.target.value));
+
+
+        if (typeof (event.target.value) === 'string') {
+            this.setState({
+                pageSize: [event.target.value],
+            });
+
+            this.props.getPrevNextUsers(`${this.state.baseUrl}pageSize=${event.target.value}&pageNumber=${this.state.currentPage}&searchText=${this.state.searchText}`);
+        }
     }
 
     render() {
@@ -92,7 +93,7 @@ class UserList extends React.Component {
                                 className="col-md-6"
                                 style={{ float: "right", marginTop: "4rem" }}
                                 type="text" name="searchText"
-                                onChange={this.onChange}
+                                onChange={this.onChangeSearchText}
                                 placeholder="Search"
                             />
                         </div>
@@ -106,8 +107,8 @@ class UserList extends React.Component {
                             <th>#No.</th>
                             {/* <th>Id</th> */}
                             <th>Username</th>
-                            <th>FirstName</th>
-                            <th>LastName</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
                             <th>Role</th>
                             <th></th>
                         </tr>
@@ -116,16 +117,13 @@ class UserList extends React.Component {
 
                         {users && users.items && users.items.data && users.items.data.map((user, index) => (
                             <tr key={user.id}>
-                                <td>{index + 1}</td>
+                                <td>{((this.state.currentPage - 1) * this.state.pageSize) + index + 1}</td>
                                 {/* <td>{user.id}</td> */}
                                 <td >{user.userName}</td>
                                 <td>{user.firstName}</td>
                                 <td>{user.lastName}</td>
                                 <td>{user.role}</td>
                                 <td className="tightcell">
-                                    {/* <Button color="info" className="btn-sm" >
-                                        <FontAwesomeIcon icon={faPen} />
-                                    </Button> */}
                                     <EditUserModal user={user} />
                                     {' '}
                                     <Button className="btn btn-danger btn-sm" onClick={this.handleDeleteUser(user.id)}>
@@ -137,7 +135,8 @@ class UserList extends React.Component {
                     </tbody>
                 </Table>
                 {users.loading && <Spinner type="grow" color="dark" />}
-                <PaginationHelper users={users && users.items}
+
+                <UsersPaginationHelper users={users && users.items}
                     onClickNextPage={this.onClickNextPage(users && users.items && users.items.nextPage, true)}
                     onClickPrevPage={this.onClickNextPage(users && users.items && users.items.previousPage, false)}
                     onClickPageLink={this.onClickPageLink}
@@ -145,7 +144,7 @@ class UserList extends React.Component {
                 />
 
                 <select className="custom-select col-md-3" name="pageSize" onChange={this.onChangeDropDown}>
-                    <option>Page Size</option>
+                    <option value="5">Page Size</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
