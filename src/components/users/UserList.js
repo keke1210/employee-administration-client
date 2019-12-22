@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Spinner, Button, Table, Input } from 'reactstrap';
 import AddUserModal from './AddUserModal';
 import EditUserModal from './EditUserModal';
+import { history } from '../../_helpers';
 
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -62,11 +63,6 @@ class UserList extends React.Component {
     }
 
     onChangeDropDown = (event) => {
-
-
-        console.log(typeof (event.target.value));
-
-
         if (typeof (event.target.value) === 'string') {
             this.setState({
                 pageSize: [event.target.value],
@@ -76,10 +72,15 @@ class UserList extends React.Component {
         }
     }
 
+    onDoubleClick = (id) => {
+        return (e) => {
+            history.push(`/users/${id}`);
+        }
+    }
+
     render() {
         const { users } = this.props;
-        // const newUsers = users.data;
-        console.log(users);
+        const userData = users && users.items && users.items.data;
         return (
             <Fragment>
                 <div className="container">
@@ -115,8 +116,8 @@ class UserList extends React.Component {
                     </thead>
                     <tbody>
 
-                        {users && users.items && users.items.data && users.items.data.map((user, index) => (
-                            <tr key={user.id}>
+                        {userData && userData.map((user, index) => (
+                            <tr key={user.id} onDoubleClick={this.onDoubleClick(user.id)}>
                                 <td>{((this.state.currentPage - 1) * this.state.pageSize) + index + 1}</td>
                                 {/* <td>{user.id}</td> */}
                                 <td >{user.userName}</td>
@@ -136,7 +137,8 @@ class UserList extends React.Component {
                 </Table>
                 {users.loading && <Spinner type="grow" color="dark" />}
 
-                <UsersPaginationHelper users={users && users.items}
+                <UsersPaginationHelper
+                    users={users && users.items}
                     onClickNextPage={this.onClickNextPage(users && users.items && users.items.nextPage, true)}
                     onClickPrevPage={this.onClickNextPage(users && users.items && users.items.previousPage, false)}
                     onClickPageLink={this.onClickPageLink}

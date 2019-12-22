@@ -7,7 +7,8 @@ export const projectService = {
     update,
     delete: _delete,
     getProjectsTasks,
-    getPrevNextProjects
+    getPrevNextProjects,
+    getAllProjectsDropDown
 };
 
 
@@ -17,7 +18,7 @@ function getAll() {
         headers: authHeader()
     };
 
-    return fetch(`https://localhost:44339/api/v1/projects/getall`, requestOptions).then(handleResponse);
+    return fetch(`https://localhost:44339/api/v1/projects`, requestOptions).then(handleResponse);
 }
 
 function getPrevNextProjects(url) {
@@ -26,9 +27,19 @@ function getPrevNextProjects(url) {
         headers: authHeader()
     };
     if (!url) {
-        return fetch(`https://localhost:44339/api/v1/projects/getall`, requestOptions).then(handleResponse);
+        return fetch(`https://localhost:44339/api/v1/projects`, requestOptions).then(handleResponse);
     }
     return fetch(url, requestOptions).then(handleResponse);
+}
+
+
+function getAllProjectsDropDown() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`https://localhost:44339/api/v1/projects/getall`, requestOptions).then(handleResponse);
 }
 
 

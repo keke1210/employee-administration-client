@@ -47,7 +47,10 @@ export function projects(state = {}, action) {
             return {
                 ...state,
                 loading: false,
-                items: [...state.items, action.payload]
+                items: {
+                    ...state.items,
+                    data: [...state.items, action.payload]
+                }
             }
         case projectsConstants.CREATE_PROJECT_FAILURE:
             return {
@@ -64,19 +67,22 @@ export function projects(state = {}, action) {
                 loading: true,
             };
         case projectsConstants.UPDATE_PROJECT_SUCCESS:
-            const itemIndex = state.items.findIndex(user => user.id === action.payload.id)
+            const itemIndex = state.items.data.findIndex(user => user.id === action.payload.id)
             const newArray = [
                 // destructure all items from beginning to the indexed item
-                ...state.items.slice(0, itemIndex),
+                ...state.items.data.slice(0, itemIndex),
                 // add the updated item to the array
                 action.payload,
                 // add the rest of the items to the array from the index after the replaced item
-                ...state.items.slice(itemIndex + 1)
+                ...state.items.data.slice(itemIndex + 1)
             ]
             return {
                 ...state,
                 loading: false,
-                items: newArray
+                items: {
+                    ...state.items,
+                    data: newArray
+                }
             };
         case projectsConstants.UPDATE_PROJECT_FAILURE:
             return {
@@ -90,29 +96,60 @@ export function projects(state = {}, action) {
         case projectsConstants.DELETE_REQUEST:
             return {
                 ...state,
-                items: state.items.map(project =>
-                    project.id === action.id
-                        ? { ...project, deleting: true }
-                        : project
-                )
+                items: {
+                    ...state.items,
+                    data: state.items.data.map(project =>
+                        project.id === action.id
+                            ? { ...project, deleting: true }
+                            : project
+                    )
+                }
             };
         case projectsConstants.DELETE_SUCCESS:
             return {
-                items: state.items.filter(project => project.id !== action.id)
+                ...state,
+                items: {
+                    ...state.items,
+                    data: state.items.data.filter(project => project.id !== action.id)
+                }
             }
         case projectsConstants.DELETE_FAILURE:
             return {
                 ...state,
-                items: state.items.map(project => {
-                    if (project.id === action.id) {
-                        // make copy of user without 'deleting:true' property
-                        const { deleting, ...userCopy } = project;
-                        // return copy of user with 'deleteError:[error]' property
-                        return { ...userCopy, deleteError: action.error };
-                    }
+                items: {
+                    ...state.items,
+                    data: state.items.data.map(project => {
+                        if (project.id === action.id) {
+                            // make copy of user without 'deleting:true' property
+                            const { deleting, ...userCopy } = project;
+                            // return copy of user with 'deleteError:[error]' property
+                            return { ...userCopy, deleteError: action.error };
+                        }
 
-                    return project;
-                })
+                        return project;
+                    })
+                }
+            };
+        default:
+            return state;
+    }
+}
+
+export function projectsDropDown(state = {}, action) {
+    switch (action.type) {
+        case projectsConstants.GETALL_PROJECTS_DROPDOWN_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case projectsConstants.GETALL_PROJECTS_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                projects: action.projects
+            };
+        case projectsConstants.GETALL_PROJECTS_DROPDOWN_FAILURE:
+            return {
+                error: action.error
             };
         default:
             return state;

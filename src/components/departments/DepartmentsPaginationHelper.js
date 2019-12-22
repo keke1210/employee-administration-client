@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
-const DepartmentsPaginationHelper = ({ departments, onClickNextPage, onClickPageLink, onClickPrevPage, currentPage }) => {
+const DepartmentsPaginationHelper = ({ departments, onClickNextPage, onClickFirstPage, onClickLastPage, onClickPageLink, onClickPrevPage, currentPage }) => {
 
     const pageNumbers = [];
     let totalPg = departments && departments.totalPages;
@@ -21,6 +21,9 @@ const DepartmentsPaginationHelper = ({ departments, onClickNextPage, onClickPage
     return (
         <div style={{ float: "right" }}>
             <Pagination aria-label="Page navigation example">
+                <PaginationItem>
+                    <PaginationLink first href="#" onClick={onClickFirstPage} />
+                </PaginationItem>
                 <PaginationItem disabled={departments && departments.previousPage === null ? true : false}>
                     <PaginationLink previous href="#" onClick={onClickPrevPage} />
                 </PaginationItem>
@@ -29,6 +32,9 @@ const DepartmentsPaginationHelper = ({ departments, onClickNextPage, onClickPage
 
                 <PaginationItem disabled={departments && departments.nextPage === null ? true : false}>
                     <PaginationLink next href="#" onClick={onClickNextPage} />
+                </PaginationItem>
+                <PaginationItem>
+                    <PaginationLink last href="#" onClick={onClickLastPage} />
                 </PaginationItem>
             </Pagination>
 

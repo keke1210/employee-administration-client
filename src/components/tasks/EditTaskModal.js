@@ -23,10 +23,11 @@ export class EditTaskModal extends Component {
         submitted: false,
         checked: false,
         taskData: {
-            id: '',
             taskName: '',
             description: '',
-            completed: ''
+            completed: false,
+            projectId: '',
+            userId: ''
         }
 
     }
@@ -51,7 +52,8 @@ export class EditTaskModal extends Component {
                 id: task.id,
                 taskName: task.taskName,
                 description: task.description,
-                completed: task.completed
+                completed: task.completed,
+                userId: task.userId
             }
         });
     }

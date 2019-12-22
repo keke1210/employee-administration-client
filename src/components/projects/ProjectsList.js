@@ -20,7 +20,7 @@ export class ProjectsList extends Component {
         this.state = {
             searchText: '',
             pageSize: 5,
-            baseUrl: 'https://localhost:44339/api/v1/projects/getall?',
+            baseUrl: 'https://localhost:44339/api/v1/projects?',
             currentPage: 1
         }
 
@@ -111,23 +111,22 @@ export class ProjectsList extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {projects && projects.items && projects.items && projects.items.data
-                            && projects.items.data.map((project, index) =>
-                                (
-                                    <tr key={project.id} onDoubleClick={this.onDoubleClick(project.id)}>
-                                        <td>{((this.state.currentPage - 1) * this.state.pageSize) + index + 1}</td>
-                                        {/* <td>{project.id}</td> */}
-                                        <td>{project.projectName}</td>
-                                        {/* <td>{project.departmentID}</td> */}
-                                        <td className="tightcell">
-                                            {' '}
-                                            <EditProjectModal project={project} /> &nbsp;
+                        {projects && projects.items && projects.items.data && projects.items.data.map((project, index) =>
+                            (
+                                <tr key={project.id} onDoubleClick={this.onDoubleClick(project.id)}>
+                                    <td>{((this.state.currentPage - 1) * this.state.pageSize) + index + 1}</td>
+                                    {/* <td>{project.id}</td> */}
+                                    <td>{project.projectName}</td>
+                                    {/* <td>{project.departmentID}</td> */}
+                                    <td className="tightcell">
+                                        {' '}
+                                        <EditProjectModal project={project} /> &nbsp;
                                         <Button className="btn btn-danger btn-sm" onClick={this.handleDeleteProject(project.id)}>
-                                                <FontAwesomeIcon icon={faTrash} />
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                            <FontAwesomeIcon icon={faTrash} />
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
 
                     </tbody>
 

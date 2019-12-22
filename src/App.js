@@ -12,12 +12,13 @@ import { PrivateRoute } from './components/common';
 import { UserList } from './components/users';
 import { alertActions } from './actions';
 import { connect } from 'react-redux';
-import DepartmentsList from './components/departments/DepartmentsList'
-import ProjectsList from './components/projects/ProjectsList'
-import TaskList from './components/tasks/TaskList'
-import ProjectTasks from './components/projects/ProjectTasks'
+import DepartmentsList from './components/departments/DepartmentsList';
+import ProjectsList from './components/projects/ProjectsList';
+import TaskList from './components/tasks/TaskList';
+import ProjectTasks from './components/projects/ProjectTasks';
+import ShowUser from './components/users/ShowUser';
 // import { Alert } from 'reactstrap';
-
+import AlertHandler from './components/layouts/AlertHandler';
 
 class App extends Component {
   constructor(props) {
@@ -37,13 +38,12 @@ class App extends Component {
     this.setState({ visible: true }, () => {
       window.setTimeout(() => {
         this.setState({ visible: false })
-      }, 2000)
+      }, 200)
     });
   }
 
   render() {
     const { alert } = this.props;
-    console.log(alert)
 
     return (
 
@@ -55,14 +55,16 @@ class App extends Component {
             <div className="container">
               {/* <button onClick={this.onShowAlert} >Click</button> 
               {alert.message && <Alert color={alert.type} isOpen={this.state.visible} transition={{ in: true, timeout: 2000 }}> {alert.message}</Alert  >} */}
-              {alert.message &&
-                <div className={`alert alert-${alert.type}`}>Error: {alert.message}</div>
-              }
+              {/* {alert.message &&
+                <div onLoad={this.onShowAlert} className={`alert alert-${alert.type}`}>Error: {alert.message}</div>
+              } */}
+              <AlertHandler alert={alert} />
               <Switch>
-                <PrivateRoute exact path="/" component={Dashboard} />
+                <Route exact path="/" component={Dashboard} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
                 <PrivateRoute exact path="/users" roles={[Role.Administrator]} component={UserList} />
+                <PrivateRoute path="/users/:id" component={ShowUser} />
                 <PrivateRoute exact path="/departments" component={DepartmentsList} />
                 <PrivateRoute exact path="/projects" component={ProjectsList} />
                 <PrivateRoute path="/projects/:id" component={ProjectTasks} />
@@ -72,9 +74,6 @@ class App extends Component {
                 <Redirect from="*" to="/" />
               </Switch>
             </div>
-            <footer className="container">
-              <p>© Company 2017-2018 </p>
-            </footer>
           </Fragment>
         </Router>
       </Fragment>

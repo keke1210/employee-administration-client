@@ -31,7 +31,7 @@ export class ProjectTasks extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {projects && projects.items && projects.items.map((task, index) =>
+                        {projects && projects.items && projects.items.data && projects.items.data.map((task, index) =>
                             (
                                 <tr key={index}>
                                     <td>{index + 1}</td>

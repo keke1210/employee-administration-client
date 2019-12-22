@@ -27,10 +27,16 @@ export function departments(state = {}, action) {
                 loading: true
             };
         case departmentsConstants.CREATE_DEPARTMENT_SUCCESS:
+            const createdArr = [
+                action.payload, ...state.items.data
+            ]
             return {
                 ...state,
                 loading: false,
-                items: [action.payload, ...state.items]
+                items: {
+                    ...state.items,
+                    data: createdArr.slice(0, state.items.pageSize)
+                }
             }
         case departmentsConstants.CREATE_DEPARTMENT_FAILURE:
             return {
@@ -40,26 +46,28 @@ export function departments(state = {}, action) {
             };
 
 
-
         case departmentsConstants.UPDATE_DEPARTMENT_REQUEST:
             return {
                 ...state,
                 loading: true,
             };
         case departmentsConstants.UPDATE_DEPARTMENT_SUCCESS:
-            const itemIndex = state.items.findIndex(user => user.id === action.payload.id)
+            const itemIndex = state.items.data.findIndex(user => user.id === action.payload.id)
             const newArray = [
                 // destructure all items from beginning to the indexed item
-                ...state.items.slice(0, itemIndex),
+                ...state.items.data.slice(0, itemIndex),
                 // add the updated item to the array
                 action.payload,
                 // add the rest of the items to the array from the index after the replaced item
-                ...state.items.slice(itemIndex + 1)
+                ...state.items.data.slice(itemIndex + 1)
             ]
             return {
                 ...state,
                 loading: false,
-                items: newArray
+                items: {
+                    ...state.items,
+                    data: newArray
+                }
             };
         case departmentsConstants.UPDATE_DEPARTMENT_FAILURE:
             return {
@@ -73,29 +81,61 @@ export function departments(state = {}, action) {
         case departmentsConstants.DELETE_REQUEST:
             return {
                 ...state,
-                items: state.items.map(department =>
-                    department.id === action.id
-                        ? { ...department, deleting: true }
-                        : department
-                )
+                items: {
+                    ...state.items,
+                    data: state.items.data.map(department =>
+                        department.id === action.id
+                            ? { ...department, deleting: true }
+                            : department
+                    )
+                }
             };
         case departmentsConstants.DELETE_SUCCESS:
             return {
-                items: state.items.filter(department => department.id !== action.id)
+                ...state,
+                items: {
+                    ...state.items,
+                    data: state.items.data.filter(department => department.id !== action.id)
+                }
             }
         case departmentsConstants.DELETE_FAILURE:
             return {
                 ...state,
-                items: state.items.map(department => {
-                    if (department.id === action.id) {
-                        // make copy of user without 'deleting:true' property
-                        const { deleting, ...userCopy } = department;
-                        // return copy of user with 'deleteError:[error]' property
-                        return { ...userCopy, deleteError: action.error };
-                    }
+                items: {
+                    ...state.items,
+                    data: state.items.data.map(department => {
+                        if (department.id === action.id) {
+                            // make copy of user without 'deleting:true' property
+                            const { deleting, ...userCopy } = department;
+                            // return copy of user with 'deleteError:[error]' property
+                            return { ...userCopy, deleteError: action.error };
+                        }
 
-                    return department;
-                })
+                        return department;
+                    })
+                }
+            };
+
+        default:
+            return state;
+    }
+}
+
+export function departmentsDropDown(state = {}, action) {
+    switch (action.type) {
+        case departmentsConstants.GETALL_DEPARTMENTS_DROPDOWN_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case departmentsConstants.GETALL_DEPARTMENTS_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                departments: action.departments
+            };
+        case departmentsConstants.GETALL_DEPARTMENTS_DROPDOWN_FAILURE:
+            return {
+                error: action.error
             };
         default:
             return state;

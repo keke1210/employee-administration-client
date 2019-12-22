@@ -9,12 +9,13 @@ export const userService = {
     getById,
     update,
     delete: _delete,
-    getPrevNextUsers
+    getPrevNextUsers,
+    getUserProjects,
+    addUserProject,
+    removeUserProject
 };
 
-
 // const currentUser = JSON.parse(localStorage.getItem('user'));
-
 
 function login(username, password) {
     const requestOptions = {
@@ -59,7 +60,6 @@ function getPrevNextUsers(url) {
 }
 
 
-
 function getById(id) {
     const requestOptions = {
         method: 'GET',
@@ -67,6 +67,33 @@ function getById(id) {
     };
 
     return fetch(`https://localhost:44339/api/v1/users/${id}`, requestOptions).then(handleResponse);
+}
+
+function getUserProjects(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`https://localhost:44339/api/v1/users/${id}/projects`, requestOptions).then(handleResponse);
+}
+
+function addUserProject(userId, projectId) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader() },
+    };
+
+    return fetch(`https://localhost:44339/api/v1/users/createUserProjects?userId=${userId}&projectId=${projectId}`, requestOptions).then(handleResponse);
+}
+
+function removeUserProject(userId, projectId) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader() },
+    };
+
+    return fetch(`https://localhost:44339/api/v1/users/removeUserProjects?userId=${userId}&projectId=${projectId}`, requestOptions).then(handleResponse);
 }
 
 function createUser(user) {
@@ -88,6 +115,8 @@ function register(user) {
 
     return fetch(`https://localhost:44339/api/v1/auth/register`, requestOptions).then(handleResponse);
 }
+
+
 
 function update(user) {
     const requestOptions = {

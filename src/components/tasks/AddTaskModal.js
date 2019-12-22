@@ -11,7 +11,6 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { taskActions, userActions, projectActions } from '../../actions';
-import CheckBox from '../layouts/CheckBox';
 
 export class AddTaskModal extends Component {
     state = {
@@ -33,7 +32,7 @@ export class AddTaskModal extends Component {
 
 
     componentDidMount() {
-        this.props.getProjects();
+        this.props.getProjectsDropDown();
         this.props.getUsers();
     }
 
@@ -65,28 +64,30 @@ export class AddTaskModal extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
+
         this.setState({
             submitted: true
         });
 
-
         const { taskData } = this.state;
         const { user } = this.props;
         if (taskData && taskData.taskName && taskData.description
-            && taskData.projectId) {
+            // && taskData.projectId
+        ) {
 
             if (!user.isAdmin) {
                 taskData.userId = user.user.id;
             }
-
+            console.log("kaloi")
             this.props.addTask(taskData);
             this.toggle();
         }
     }
+
     render() {
         const { submitted, taskData } = this.state;
-        const { users, projects, user } = this.props;
-        console.log(user)
+        const { users, user, projectsDropDown } = this.props;
+        console.log(projectsDropDown)
         return (
             <div>
                 <Button
@@ -136,17 +137,17 @@ export class AddTaskModal extends Component {
                                 }
                             </FormGroup>
 
-                            {/* <FormGroup>
+                            <FormGroup>
                                 <Label for="taskName">Project</Label>
-                                <select className={`custom-select`} name="projectId" id="departmentID" onChange={this.onChange}>
+                                <select className={`custom-select`} name="projectId" id="projectId" onChange={this.onChange}>
                                     <option>Select project</option>
-                                    {projects && projects.items &&
-                                        projects.items.map((project, index) => (
+                                    {projectsDropDown && projectsDropDown.projects &&
+                                        projectsDropDown.projects.map((project, index) => (
                                             <option key={index} value={project.id}>{project.projectName}</option>
                                         ))}
                                 </select>
 
-                            </FormGroup> */}
+                            </FormGroup>
 
                             {/* {user.isAdmin && <FormGroup>
                                 <Label for="taskName">User</Label>
@@ -173,6 +174,7 @@ export class AddTaskModal extends Component {
                             </FormGroup> */}
                             <FormGroup>
                                 <Button
+                                    type="submit"
                                     color="dark"
                                     style={{ marginTop: '2rem' }}
                                     block
@@ -188,13 +190,13 @@ export class AddTaskModal extends Component {
 
 const mapStateToProps = state => ({
     users: state.users,
-    projects: state.projects,
-    user: state.authentication.user
+    user: state.authentication.user,
+    projectsDropDown: state.projectsDropDown
 })
 const actionCreators = {
     getUsers: userActions.getAll,
-    getProjects: projectActions.getAll,
-    addTask: taskActions.createTask
+    addTask: taskActions.createTask,
+    getProjectsDropDown: projectActions.getAllProjectsDropDown
 }
 
 export default connect(mapStateToProps, actionCreators)(AddTaskModal)

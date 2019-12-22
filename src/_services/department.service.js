@@ -6,7 +6,8 @@ export const departmentService = {
     getById,
     update,
     delete: _delete,
-    getPrevNextDepartments
+    getPrevNextDepartments,
+    getAllDepartmentsDropDown
 };
 
 
@@ -16,7 +17,7 @@ function getAll() {
         headers: authHeader()
     };
 
-    return fetch(`https://localhost:44339/api/v1/departments/getall`, requestOptions).then(handleResponse);
+    return fetch(`https://localhost:44339/api/v1/departments`, requestOptions).then(handleResponse);
 }
 
 function getById(id) {
@@ -38,16 +39,27 @@ function create(departmentRequest) {
     return fetch(`https://localhost:44339/api/v1/departments/create`, requestOptions).then(handleResponse);
 }
 
+
+function getAllDepartmentsDropDown() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`https://localhost:44339/api/v1/departments/getall`, requestOptions).then(handleResponse);
+}
+
 function getPrevNextDepartments(url) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
     if (!url) {
-        return fetch(`https://localhost:44339/api/v1/departments/getall`, requestOptions).then(handleResponse);
+        return fetch(`https://localhost:44339/api/v1/departments`, requestOptions).then(handleResponse);
     }
     return fetch(url, requestOptions).then(handleResponse);
 }
+
 
 
 function update(departmentRequest) {

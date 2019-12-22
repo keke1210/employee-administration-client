@@ -2,11 +2,11 @@ import { combineReducers } from 'redux';
 
 import { authentication } from './authentication.reducer';
 import { registration } from './registration.reducer';
-import { users } from './users.reducer';
+import { users, showUser, userProjects } from './users.reducer';
 import { alert } from './alert.reducer';
 import { profile } from './profile.reducer';
-import { departments } from './department.reducer';
-import { projects } from './projects.reducer';
+import { departments, departmentsDropDown } from './department.reducer';
+import { projects, projectsDropDown } from './projects.reducer';
 import { tasks } from './tasks.reducer';
 
 const appReducer = combineReducers({
@@ -18,7 +18,11 @@ const appReducer = combineReducers({
     users,
     departments,
     projects,
-    tasks
+    tasks,
+    departmentsDropDown,
+    projectsDropDown,
+    showUser,
+    userProjects
 })
 
 const rootReducer = (state, action) => {

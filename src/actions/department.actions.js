@@ -8,7 +8,8 @@ export const departmentActions = {
     updateDepartment,
     getAll,
     delete: _delete,
-    getPrevNextDepartments
+    getPrevNextDepartments,
+    getAllDepartmentsDropDown
 };
 
 
@@ -20,6 +21,8 @@ function createDepartment(department) {
         departmentService.create(department)
             .then(
                 department => {
+                    console.log(department);
+
                     dispatch(addDepartment(department));
                 },
                 error => {
@@ -75,6 +78,27 @@ function getAll() {
     function success(departments) { return { type: departmentsConstants.GETALL_SUCCESS, departments } }
     function failure(error) { return { type: departmentsConstants.GETALL_FAILURE, error } }
 }
+
+
+function getAllDepartmentsDropDown() {
+    return dispatch => {
+        dispatch(request());
+
+        departmentService.getAllDepartmentsDropDown()
+            .then(
+                departments => dispatch(success(departments)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Error: Failed to fetch the data!"));
+                }
+            );
+    }
+
+    function request() { return { type: departmentsConstants.GETALL_DEPARTMENTS_DROPDOWN_REQUEST } }
+    function success(departments) { return { type: departmentsConstants.GETALL_DEPARTMENTS_DROPDOWN_SUCCESS, departments } }
+    function failure(error) { return { type: departmentsConstants.GETALL_DEPARTMENTS_DROPDOWN_FAILURE, error } }
+}
+
 
 function getPrevNextDepartments(url) {
     return dispatch => {

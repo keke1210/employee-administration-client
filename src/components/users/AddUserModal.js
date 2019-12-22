@@ -14,6 +14,7 @@ import { userActions } from '../../actions/user.actions';
 import { departmentActions } from '../../actions/department.actions';
 
 import PropTypes from 'prop-types';
+import { projectActions } from '../../actions';
 
 class AddUserModal extends Component {
     state = {
@@ -26,17 +27,19 @@ class AddUserModal extends Component {
             role: '',
             password: '',
             confirmPassword: '',
-            departmentID: ''
+            departmentID: '',
+            projectId: ''
         },
         isEmployee: true
     }
 
-    static propTypes = {
-        isAdmin: PropTypes.bool
-    };
+    // static propTypes = {
+    //     isAdmin: PropTypes.bool
+    // };
 
     componentDidMount() {
         this.props.getDepartments();
+        this.props.getProjects();
     }
 
     toggle = () => {
@@ -78,9 +81,9 @@ class AddUserModal extends Component {
 
     render() {
         const { submitted, userData } = this.state;
-        const { departments } = this.props;
+        const { projectsDropDown, departmentsDropDown } = this.props;
 
-        console.log(departments);
+        console.log(projectsDropDown);
         return (
             <div>
                 <Button
@@ -90,9 +93,6 @@ class AddUserModal extends Component {
                 >
                     Add User
                 </Button>
-
-
-
                 <Modal
                     isOpen={this.state.modal}
                     toggle={this.toggle}
@@ -134,7 +134,6 @@ class AddUserModal extends Component {
                             </FormGroup>
                             <FormGroup>
                                 <Label for="lastName">Last Name</Label>
-
                                 <Input
                                     className={submitted && !userData.lastName ? 'is-invalid' : ''}
                                     type="text"
@@ -150,8 +149,12 @@ class AddUserModal extends Component {
 
                             <FormGroup>
                                 <Label for="role">Role</Label>
-
-                                <select className={`custom-select ${submitted && !userData.role ? 'is-invalid' : ''}`} name="role" id="role" onChange={this.onChange}>
+                                <select
+                                    className={`custom-select ${submitted && !userData.role ? 'is-invalid' : ''}`}
+                                    name="role"
+                                    id="role"
+                                    onChange={this.onChange}
+                                >
                                     <option>Select role</option>
                                     <option value="Employee">Employee</option>
                                     <option value="Administrator">Administrator</option>
@@ -161,20 +164,39 @@ class AddUserModal extends Component {
                                 }
 
                             </FormGroup>
-                            {userData.role && userData.role === "Employee" && <FormGroup>
+                            {userData.role === "Employee" && <FormGroup>
                                 {userData.departmentID && <Label for="departmentID">Department</Label>}
 
-                                {!userData.departmentID && <small for="departmentName" className="text-danger">Please assign a department to this user</small>}
+                                {!userData.departmentID && <small className="text-danger">Please assign a department to this user</small>}
 
-                                <select className={`custom-select`} name="departmentID" id="departmentID" onChange={this.onChange}>
+                                <select
+                                    className={`custom-select ${submitted && !userData.departmentID ? 'is-invalid' : ''}`}
+                                    name="departmentID"
+                                    id="departmentID"
+                                    onChange={this.onChange}
+                                >
                                     <option>Select department</option>
-                                    {departments && departments.items &&
-                                        departments.items.map((department, index) => (
+                                    {departmentsDropDown && departmentsDropDown.departments &&
+                                        departmentsDropDown.departments.map((department, index) => (
                                             <option key={index} value={department.id}>{department.departmentName}</option>
                                         ))}
                                 </select>
-
+                                {submitted && !userData.departmentID && userData.role && userData.role === "Employee" &&
+                                    <small className="help-block text-danger">Department is required</small>
+                                }
                             </FormGroup>}
+                            {/* <FormGroup>
+                                {userData.projectId && <Label for="projectId">Projects</Label>}
+
+                                <select className={`custom-select`} name="projectId" id="projectId" onChange={this.onChange}>
+                                    <option>Select Project</option>
+                                    {projectsDropDown && projectsDropDown.projects &&
+                                        projectsDropDown.projects.map((project, index) => (
+                                            <option key={index} value={project.id}>{project.projectName}</option>
+                                        ))}
+                                </select>
+
+                            </FormGroup> */}
                             <FormGroup>
                                 <Label for="password">Password</Label>
                                 <Input
@@ -225,13 +247,14 @@ class AddUserModal extends Component {
 const mapStateToProps = state => ({
     item: state.item,
     isAdmin: state.authentication.user.isAdmin,
-    departments: state.departments
-
+    departmentsDropDown: state.departmentsDropDown,
+    projectsDropDown: state.projectsDropDown
 });
 
 const actionCreators = {
     addUser: userActions.createUser,
-    getDepartments: departmentActions.getAll
+    getDepartments: departmentActions.getAllDepartmentsDropDown,
+    getProjects: projectActions.getAllProjectsDropDown
 }
 
 export default connect(mapStateToProps, actionCreators)(AddUserModal);
