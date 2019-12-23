@@ -10,7 +10,8 @@ export const projectActions = {
     delete: _delete,
     getProjectTasks,
     getPrevNextProjects,
-    getAllProjectsDropDown
+    getAllProjectsDropDown,
+    getProjectById
 };
 
 
@@ -134,6 +135,26 @@ function getProjectTasks(id) {
     function request() { return { type: projectsConstants.GETALL_TASKS_REQUEST } }
     function success(payload) { return { type: projectsConstants.GETALL_TASKS_SUCCESS, payload } }
     function failure(error) { return { type: projectsConstants.GETALL_TASKS_FAILURE, error } }
+}
+
+
+function getProjectById(id) {
+    return dispatch => {
+        dispatch(request());
+
+        projectService.getById(id)
+            .then(
+                project => dispatch(success(project)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Error: Failed to fetch the data!"));
+                }
+            );
+    };
+
+    function request() { return { type: projectsConstants.GET_PROJECT_REQUEST } }
+    function success(payload) { return { type: projectsConstants.GET_PROJECT_SUCCESS, payload } }
+    function failure(error) { return { type: projectsConstants.GET_PROJECT_FAILURE, error } }
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

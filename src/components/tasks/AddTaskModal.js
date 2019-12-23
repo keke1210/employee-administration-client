@@ -71,14 +71,14 @@ export class AddTaskModal extends Component {
 
         const { taskData } = this.state;
         const { user } = this.props;
-        if (taskData && taskData.taskName && taskData.description
-            // && taskData.projectId
-        ) {
+
+        console.log(user)
+
+        if (taskData && taskData.taskName && taskData.description && taskData.projectId) {
 
             if (!user.isAdmin) {
                 taskData.userId = user.user.id;
             }
-            console.log("kaloi")
             this.props.addTask(taskData);
             this.toggle();
         }
@@ -87,7 +87,6 @@ export class AddTaskModal extends Component {
     render() {
         const { submitted, taskData } = this.state;
         const { users, user, projectsDropDown } = this.props;
-        console.log(projectsDropDown)
         return (
             <div>
                 <Button

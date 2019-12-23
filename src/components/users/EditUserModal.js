@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { userActions } from '../../actions/user.actions';
+import { departmentActions } from '../../actions/department.actions';
 import PropTypes from 'prop-types';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -25,6 +26,7 @@ export class EditUserModal extends Component {
             firstName: '',
             lastName: '',
             userName: '',
+            departmentId: '',
             password: '',
             confirmPassword: ''
         }
@@ -44,7 +46,8 @@ export class EditUserModal extends Component {
                 id: user.id,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                userName: user.userName
+                userName: user.userName,
+                departmentId: user.departmentId,
             }
         });
     }
@@ -78,7 +81,7 @@ export class EditUserModal extends Component {
 
     render() {
         const { submitted, userData } = this.state;
-
+        const { departmentsDropDown } = this.props;
         return (
             <Fragment>
                 <Button color="info" className="btn-sm" onClick={this.toggle} >
@@ -138,7 +141,22 @@ export class EditUserModal extends Component {
                                     <small className="help-block text-danger">Last Name is required</small>
                                 }
                             </FormGroup>
-
+                            <FormGroup>
+                                <Label for="departmentId">Department</Label>
+                                <select
+                                    defaultValue={this.state.userData.departmentId}
+                                    className={`custom-select ${submitted && !userData.departmentId ? 'is-invalid' : ''}`}
+                                    name="departmentId"
+                                    id="departmentId"
+                                    onChange={this.onChange}
+                                >
+                                    <option>Select department</option>
+                                    {departmentsDropDown && departmentsDropDown.departments &&
+                                        departmentsDropDown.departments.map((department, index) => (
+                                            <option key={index} value={department.id}>{department.departmentName}</option>
+                                        ))}
+                                </select>
+                            </FormGroup>
                             {/* <FormGroup>
 
                                 <select className={`custom-select ${submitted && !userData.role ? 'is-invalid' : ''}`} name="role" onChange={this.onChange}>
@@ -196,11 +214,14 @@ export class EditUserModal extends Component {
 }
 
 const mapStateToProps = state => ({
-    users: state.items
+    users: state.items,
+    departmentsDropDown: state.departmentsDropDown
 });
 
 const actionCreators = {
-    updateUser: userActions.updateUser
+    updateUser: userActions.updateUser,
+    getDepartments: departmentActions.getAllDepartmentsDropDown,
+
 }
 
 

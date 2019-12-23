@@ -17,6 +17,7 @@ import ProjectsList from './components/projects/ProjectsList';
 import TaskList from './components/tasks/TaskList';
 import ProjectTasks from './components/projects/ProjectTasks';
 import ShowUser from './components/users/ShowUser';
+import ShowTask from './components/tasks/ShowTask';
 // import { Alert } from 'reactstrap';
 import AlertHandler from './components/layouts/AlertHandler';
 
@@ -69,6 +70,7 @@ class App extends Component {
                 <PrivateRoute exact path="/projects" component={ProjectsList} />
                 <PrivateRoute path="/projects/:id" component={ProjectTasks} />
                 <PrivateRoute exact path="/tasks" component={TaskList} />
+                <PrivateRoute exact path="/tasks/:id" component={ShowTask} />
                 <PrivateRoute exact path="/profile" component={UserProfile} />
 
                 <Redirect from="*" to="/" />
@@ -76,6 +78,14 @@ class App extends Component {
             </div>
           </Fragment>
         </Router>
+        {/* <footer className="footer">
+          <Container>
+            <hr />
+            <p>
+              &copy; Employee Administration 2019-2020 Skerdi Berberi
+          </p>
+          </Container>
+        </footer> */}
       </Fragment>
     );
   }

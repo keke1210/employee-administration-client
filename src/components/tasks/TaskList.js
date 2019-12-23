@@ -4,6 +4,8 @@ import { Table, Col, Spinner, Row, Button, Form, FormGroup, Label, Input, Contai
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import { history } from '../../_helpers'
+
 import { connect } from 'react-redux';
 import { taskActions } from '../../actions';
 import AddTaskModal from './AddTaskModal'
@@ -68,8 +70,13 @@ export class TaskList extends Component {
         this.props.getPrevNextTasks(`${this.state.baseUrl}pageSize=${event.target.value}&pageNumber=${this.state.currentPage}&searchText=${this.state.searchText}`);
     }
 
+    onDoubleClick = (id) => {
+        return (e) => history.push(`/tasks/${id}`);
+    }
+
     render() {
-        const { tasks } = this.props;
+        const { tasks, isAdmin } = this.props;
+        console.log(tasks)
         return (
             <Fragment>
                 <Container>
@@ -103,10 +110,10 @@ export class TaskList extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {tasks && tasks.items && tasks.items && tasks.items.data
+                        {tasks && tasks.items && tasks.items.data
                             && tasks.items.data.map((task, index) =>
                                 (
-                                    <tr key={task.id}>
+                                    <tr key={task.id} onDoubleClick={this.onDoubleClick(task.id)}>
                                         <td>{((this.state.currentPage - 1) * this.state.pageSize) + index + 1}</td>
                                         {/* <td>{task.id}</td> */}
                                         <td>{task.taskName}</td>
@@ -149,7 +156,8 @@ export class TaskList extends Component {
 
 const mapStateToProps = state => ({
     tasks: state.tasks,
-    task: state.task
+    task: state.task,
+    isAdmin: state.authentication.user.isAdmin
 });
 
 const actionCreators = {

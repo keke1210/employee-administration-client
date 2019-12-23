@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { projectActions } from '../../actions/project.actions';
+import { departmentActions } from '../../actions/department.actions';
 
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -22,7 +23,8 @@ export class EditProjectModal extends Component {
         submitted: false,
         projectData: {
             id: '',
-            projectName: ''
+            projectName: '',
+            departmentId: ''
         }
 
     }
@@ -35,6 +37,7 @@ export class EditProjectModal extends Component {
             projectData: {
                 id: project.id,
                 projectName: project.projectName,
+                departmentId: project.departmentId
             }
         });
     }
@@ -65,7 +68,7 @@ export class EditProjectModal extends Component {
 
     render() {
         const { submitted, projectData } = this.state;
-
+        const { departmentsDropDown } = this.props;
         return (
             <Fragment>
                 <Button color="info" className="btn-sm" onClick={this.toggle} >
@@ -95,6 +98,26 @@ export class EditProjectModal extends Component {
                                 }
                             </FormGroup>
                             <FormGroup>
+                                <Label for="departmentId">Department</Label>
+
+                                <select
+                                    defaultValue={this.state.projectData.departmentId}
+                                    className={`custom-select ${submitted && !projectData.departmentId ? 'is-invalid' : ''}`}
+                                    name="departmentId"
+                                    id="departmentId"
+                                    onChange={this.onChange}
+                                >
+                                    <option value="0">Select department</option>
+                                    {departmentsDropDown && departmentsDropDown.departments &&
+                                        departmentsDropDown.departments.map((department, index) => (
+                                            <option key={index} value={department.id}>{department.departmentName}</option>
+                                        ))}
+                                </select>
+                                {submitted && !projectData.departmentId &&
+                                    <small className="help-block text-danger">Department is required</small>
+                                }
+                            </FormGroup>
+                            <FormGroup>
                                 <Button
                                     color="dark"
                                     style={{ marginTop: '2rem' }}
@@ -111,11 +134,13 @@ export class EditProjectModal extends Component {
 }
 
 const mapStateToProps = state => ({
-
+    departmentsDropDown: state.departmentsDropDown,
 });
 
 const actionCreators = {
-    updateProject: projectActions.updateProject
+    updateProject: projectActions.updateProject,
+    getDepartments: departmentActions.getAllDepartmentsDropDown
+
 }
 
 export default connect(mapStateToProps, actionCreators)(EditProjectModal)

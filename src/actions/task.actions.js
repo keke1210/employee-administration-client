@@ -9,7 +9,12 @@ export const taskActions = {
     getAll,
     delete: _delete,
     markTaskAsCompleted,
-    getPrevNextTasks
+    getPrevNextTasks,
+    showUsersTaskDropdown,
+    getTaskById,
+    getUsersOfTask,
+    addUserTask,
+    removeUserTask
 };
 
 
@@ -20,7 +25,7 @@ function createTask(task) {
 
         taskServices.create(task)
             .then(
-                project => {
+                task => {
                     dispatch(success(task));
                 },
                 error => {
@@ -96,6 +101,109 @@ function getAll() {
     function request() { return { type: tasksConstants.GETALL_REQUEST } }
     function success(tasks) { return { type: tasksConstants.GETALL_SUCCESS, tasks } }
     function failure(error) { return { type: tasksConstants.GETALL_FAILURE, error } }
+}
+
+
+function showUsersTaskDropdown(id) {
+    return dispatch => {
+        dispatch(request());
+
+        taskServices.showUsersTaskDropdown(id)
+            .then(
+                tasks => dispatch(success(tasks)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Error: Failed to fetch the data!"));
+                }
+            );
+    };
+
+    function request() { return { type: tasksConstants.GET_USER_TASKS_DP_REQUEST } }
+    function success(tasks) { return { type: tasksConstants.GET_USER_TASKS_DP_SUCCESS, tasks } }
+    function failure(error) { return { type: tasksConstants.GET_USER_TASKS_DP_FAILURE, error } }
+}
+
+
+function getUsersOfTask(id) {
+    return dispatch => {
+        dispatch(request());
+
+        taskServices.getUsersOfTask(id)
+            .then(
+                userTasks => dispatch(success(userTasks)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Failed to fetch the data!"));
+                }
+            );
+    };
+
+    function request() { return { type: tasksConstants.GET_USER_TASKS_REQUEST } }
+    function success(userTasks) { return { type: tasksConstants.GET_USER_TASKS_SUCCESS, userTasks } }
+    function failure(error) { return { type: tasksConstants.GET_USER_TASKS_FAILURE, error } }
+}
+
+
+function addUserTask(userId, taskId) {
+    return dispatch => {
+        dispatch(request());
+
+        taskServices.addUserTask(userId, taskId)
+            .then(
+                userTasks => {
+                    dispatch(success(userTasks));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: tasksConstants.ADD_TASK_TO_USER_REQUEST } }
+    function success(userTasks) { return { type: tasksConstants.ADD_TASK_TO_USER_SUCCESS, userTasks } }
+    function failure(error) { return { type: tasksConstants.ADD_TASK_TO_USER_FAILURE, error } }
+}
+
+function removeUserTask(userId, taskId) {
+    return dispatch => {
+        dispatch(request(userId));
+
+        taskServices.removeUserTask(userId, taskId)
+            .then(
+                userTasks => {
+                    dispatch(success(userId));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(userId) { return { type: tasksConstants.REMOVE_TASK_FROM_USER_REQUEST, userId } }
+    function success(userId) { return { type: tasksConstants.REMOVE_TASK_FROM_USER_SUCCESS, userId } }
+    function failure(userId, error) { return { type: tasksConstants.REMOVE_TASK_FROM_USER_FAILURE, userId, error } }
+}
+
+
+function getTaskById(id) {
+    return dispatch => {
+        dispatch(request());
+
+        taskServices.getById(id)
+            .then(
+                tasks => dispatch(success(tasks)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error("Failed to fetch the data!"));
+                }
+            );
+    };
+
+    function request() { return { type: tasksConstants.GET_TASK_BY_ID_REQUEST } }
+    function success(task) { return { type: tasksConstants.GET_TASK_BY_ID_SUCCESS, task } }
+    function failure(error) { return { type: tasksConstants.GET_TASK_BY_ID_FAILURE, error } }
 }
 
 function getPrevNextTasks(url) {

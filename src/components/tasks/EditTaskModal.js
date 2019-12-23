@@ -17,23 +17,29 @@ import { taskActions, userActions, projectActions } from '../../actions';
 
 
 export class EditTaskModal extends Component {
-    state = {
-        rowId: null,
-        modal: false,
-        submitted: false,
-        checked: false,
-        taskData: {
-            taskName: '',
-            description: '',
-            completed: false,
-            projectId: '',
-            userId: ''
-        }
+    constructor(props) {
+        super(props);
+        const { task } = this.props;
+        this.state = {
+            rowId: null,
+            modal: false,
+            submitted: false,
+            checked: task.completed,
+            taskData: {
+                taskName: task.taskName,
+                description: task.description,
+                completed: task.completed,
+                projectId: task.projectId,
+                // userId: task.userId
+            }
 
+        }
     }
 
+
     componentDidMount() {
-        this.props.getProjects();
+        // this.props.getProjects();
+        this.props.getProjectsDropDown();
         this.props.getUsers();
     }
 
@@ -44,16 +50,20 @@ export class EditTaskModal extends Component {
 
     toggle = () => {
         const { task } = this.props;
+
+        console.log(task)
         this.setState({
             modal: !this.state.modal,
             submitted: false,
             checked: task.completed,
+
             taskData: {
                 id: task.id,
                 taskName: task.taskName,
                 description: task.description,
                 completed: task.completed,
-                userId: task.userId
+                // userId: task.userId,
+                projectId: task.projectId
             }
         });
     }
@@ -74,7 +84,12 @@ export class EditTaskModal extends Component {
         e.preventDefault();
         this.setState({ submitted: true });
         const { taskData } = this.state;
+        const { user } = this.props;
+
         if (taskData.taskName) {
+            if (!user.isAdmin) {
+                taskData.userId = user.id;
+            }
             // Add item via addItem action
             this.props.updateTask(taskData);
             this.toggle();
@@ -82,7 +97,7 @@ export class EditTaskModal extends Component {
     }
     render() {
         const { submitted, taskData } = this.state;
-        const { users, projects } = this.props;
+        const { users, projectsDropDown } = this.props;
 
         return (
             <Fragment>
@@ -129,17 +144,17 @@ export class EditTaskModal extends Component {
                                 }
                             </FormGroup>
 
-                            {/* <FormGroup>
-                                <Label for="taskName">Project</Label>
-                                <select className={`custom-select`} name="projectId" id="departmentID" onChange={this.onChange}>
+                            <FormGroup>
+                                <Label for="projectId">Project</Label>
+                                <select defaultValue={this.state.taskData.projectId} className={`custom-select`} name="projectId" id="projectId" onChange={this.onChange}>
                                     <option>Select project</option>
-                                    {projects && projects.items &&
-                                        projects.items.map((project, index) => (
+                                    {projectsDropDown && projectsDropDown.projects &&
+                                        projectsDropDown.projects.map((project, index) => (
                                             <option key={index} value={project.id}>{project.projectName}</option>
                                         ))}
                                 </select>
-
                             </FormGroup>
+                            {/*
                             <FormGroup>
                                 <Label for="taskName">User</Label>
                                 <select className={`custom-select`} name="userId" id="departmentID" onChange={this.onChange}>
@@ -179,13 +194,16 @@ export class EditTaskModal extends Component {
 
 const mapStateToProps = state => ({
     users: state.users,
-    projects: state.projects
+    user: state.authentication.user,
+    projects: state.projects,
+    projectsDropDown: state.projectsDropDown
 });
 
 const actionCreators = {
     updateTask: taskActions.updateTask,
     getUsers: userActions.getAll,
     getProjects: projectActions.getAll,
+    getProjectsDropDown: projectActions.getAllProjectsDropDown
 }
 
 

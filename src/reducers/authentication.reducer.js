@@ -16,9 +16,12 @@ export function authentication(state = initialState, action) {
             };
         case userConstants.LOGIN_SUCCESS:
             return {
-                ...state,
-                loggedIn: true,
-                user: action.user
+                user: {
+                    loggedIn: true,
+                    // ...state.user,
+                    isAdmin: action.user.role === Role.Administrator,
+                    user: action.user
+                }
             };
         case userConstants.LOGIN_FAILURE:
             return {};

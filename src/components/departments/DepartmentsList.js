@@ -94,16 +94,17 @@ export class DepartmentsList extends Component {
                     <Row>
                         <Col>
                             <h2>Departments</h2>
+                            {!isAdmin && <Fragment><br></br><br></br><br></br></Fragment>}
                             {isAdmin && <AddDepartmentModal />}
                         </Col>
                         <Col>
-                            <Input
+                            {isAdmin && <Input
                                 className="col-md-6"
                                 style={{ float: "right", marginTop: "4rem" }}
                                 type="text" name="searchText"
                                 onChange={this.onChangeSearchText}
                                 placeholder="Search"
-                            />
+                            />}
                         </Col>
                     </Row>
                 </Container>
@@ -120,10 +121,10 @@ export class DepartmentsList extends Component {
                     <tbody>
                         {myDepartments && myDepartments.map((department, index) =>
                             (
-                                <tr key={department.id}>
-                                    <td>{((this.state.currentPage - 1) * this.state.pageSize) + index + 1}</td>
+                                <tr key={department && department.id}>
+                                    <td>{department && ((this.state.currentPage - 1) * this.state.pageSize) + index + 1}</td>
                                     {/* <td>{department.id}</td> */}
-                                    <td>{department.departmentName}</td>
+                                    <td>{department && department.departmentName}</td>
                                     {isAdmin &&
                                         <td className="tightcell">
                                             {' '}
@@ -140,7 +141,7 @@ export class DepartmentsList extends Component {
                 </Table>
                 {departments.loading && <Spinner type="grow" color="dark" />}
 
-                <DepartmentsPaginationHelper
+                {isAdmin && <DepartmentsPaginationHelper
                     departments={departments && departments.items}
                     onClickFirstPage={this.onClickNextPage(firstPage, null, 1)}
                     onClickNextPage={this.onClickNextPage(nextPage, true)}
@@ -148,15 +149,15 @@ export class DepartmentsList extends Component {
                     onClickLastPage={this.onClickNextPage(lastPageUrl, null, lastPage)}
                     onClickPageLink={this.onClickPageLink}
                     currentPage={this.state.currentPage}
-                />
+                />}
 
-                <select className="custom-select col-md-3" name="pageSize" onChange={this.onChangeDropDown}>
+                {isAdmin && <select className="custom-select col-md-3" name="pageSize" onChange={this.onChangeDropDown}>
                     <option value="5">Page Size</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
-                </select>
+                </select>}
 
             </Fragment>
 

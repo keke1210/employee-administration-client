@@ -7,7 +7,11 @@ export const taskServices = {
     update,
     delete: _delete,
     markTaskAsCompleted,
-    getPrevNextTasks
+    getPrevNextTasks,
+    showUsersTaskDropdown,
+    getUsersOfTask,
+    addUserTask,
+    removeUserTask
 };
 
 
@@ -40,6 +44,44 @@ function getById(id) {
     return fetch(`https://localhost:44339/api/v1/tasks/${id}`, requestOptions).then(handleResponse);
 }
 
+function getUsersOfTask(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`https://localhost:44339/api/v1/tasks/${id}/users`, requestOptions).then(handleResponse);
+}
+
+function showUsersTaskDropdown(taskId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`https://localhost:44339/api/v1/tasks/showUsersTaskDropdown?taskId=${taskId}`, requestOptions).then(handleResponse);
+}
+
+
+function addUserTask(userId, taskId) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader() },
+    };
+
+    return fetch(`https://localhost:44339/api/v1/tasks/createUserTasks?userId=${userId}&taskId=${taskId}`, requestOptions).then(handleResponse);
+}
+
+
+function removeUserTask(userId, taskId) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader() },
+    };
+
+    return fetch(`https://localhost:44339/api/v1/tasks/removeUserTasks?userId=${userId}&taskId=${taskId}`, requestOptions).then(handleResponse);
+}
+
 function create(task) {
     const requestOptions = {
         method: 'POST',
@@ -49,6 +91,8 @@ function create(task) {
 
     return fetch(`https://localhost:44339/api/v1/tasks/create`, requestOptions).then(handleResponse);
 }
+
+
 
 function update(task) {
     const requestOptions = {

@@ -18,7 +18,7 @@ export class AddProjectModal extends Component {
         modal: false,
         submitted: false,
         projectData: {
-            projectName: ''
+            projectName: '',
         },
         departmentID: ''
     }
@@ -32,9 +32,10 @@ export class AddProjectModal extends Component {
             modal: !this.state.modal,
             submitted: false,
             projectData: {
-                projectName: ''
+                projectName: '',
+                departmentID: ''
             },
-            departmentID: ''
+
         });
     }
 
@@ -66,10 +67,9 @@ export class AddProjectModal extends Component {
     }
     render() {
         const { submitted, projectName } = this.state;
-        const { departments } = this.props;
+        const { departmentsDropDown } = this.props;
 
-        console.log(departments);
-        console.log(this.state);
+        console.log(departmentsDropDown);
 
         return (
             <div>
@@ -104,16 +104,25 @@ export class AddProjectModal extends Component {
                                     <small className="help-block text-danger">Project Name is required</small>
                                 }
                             </FormGroup>
-                            {/* <FormGroup>
-                                <Label for="departmentName">Department</Label>
-                                <select className={`custom-select`} name="departmentID" onChange={this.onChange}>
-                                    <option>Select department</option>
-                                    {departments && departments.items &&
-                                        departments.items.map((department, index) => (
+                            <FormGroup>
+                                <Label for="departmentID">Department</Label>
+
+                                <select
+                                    className={`custom-select ${submitted && !this.state.projectData.departmentID ? 'is-invalid' : ''}`}
+                                    name="departmentID"
+                                    id="departmentID"
+                                    onChange={this.onChange}
+                                >
+                                    <option value="0">Select department</option>
+                                    {departmentsDropDown && departmentsDropDown.departments &&
+                                        departmentsDropDown.departments.map((department, index) => (
                                             <option key={index} value={department.id}>{department.departmentName}</option>
                                         ))}
                                 </select>
-                            </FormGroup> */}
+                                {submitted && !this.state.projectData.departmentID &&
+                                    <small className="help-block text-danger">Department is required</small>
+                                }
+                            </FormGroup>
 
 
                             <FormGroup>
@@ -132,12 +141,12 @@ export class AddProjectModal extends Component {
 }
 
 const mapStateToProps = state => ({
-    departments: state.departments
+    departmentsDropDown: state.departmentsDropDown,
 })
 
 const actionCreatos = {
     addProject: projectActions.createProject,
-    getDepartments: departmentActions.getAll
+    getDepartments: departmentActions.getAllDepartmentsDropDown,
 }
 
 export default connect(mapStateToProps, actionCreatos)(AddProjectModal)

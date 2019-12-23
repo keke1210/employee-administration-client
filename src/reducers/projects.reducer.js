@@ -44,12 +44,13 @@ export function projects(state = {}, action) {
                 loading: true
             };
         case projectsConstants.CREATE_PROJECT_SUCCESS:
+            const createdArr = [action.payload, ...state.items.data]
             return {
                 ...state,
                 loading: false,
                 items: {
                     ...state.items,
-                    data: [...state.items, action.payload]
+                    data: createdArr.slice(0, state.items.pageSize)
                 }
             }
         case projectsConstants.CREATE_PROJECT_FAILURE:
@@ -58,6 +59,9 @@ export function projects(state = {}, action) {
                 loading: false,
                 error: action.error
             };
+
+
+
 
 
 
@@ -153,5 +157,26 @@ export function projectsDropDown(state = {}, action) {
             };
         default:
             return state;
+    }
+}
+
+
+export function projectById(state = {}, action) {
+    switch (action.type) {
+        case projectsConstants.GET_PROJECT_REQUESt:
+            return {
+                ...state,
+                loading: true
+            }
+        case projectsConstants.GET_PROJECT_SUCCESS:
+            return action.payload;
+
+        case projectsConstants.GET_PROJECT_FAILURE:
+            return {
+                error: action.error
+            };
+        default:
+            return state;
+
     }
 }

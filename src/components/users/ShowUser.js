@@ -59,86 +59,73 @@ export class ShowUser extends Component {
 
         return (
             <Container>
-                <Row xs={2}>
-                    <Col sm={3}>
-                        <h4>User Data</h4>
-                        <Label><b>Username:</b> {`${userData && userData.userName}`}</Label> <br></br>
-                        <Label><b>First Name:</b> {`${userData && userData.firstName}`}</Label><br></br>
-                        <Label><b>Last Name:</b> {`${userData && userData.lastName}`}</Label><br></br>
-                        <Label><b>Role:</b> {`${userData && userData.role}`}</Label><br></br>
+                <div>
+                    <Col >
+                        <h4>User details :</h4>
                     </Col>
-                    <Row>
-                        <Col sm={9}>
-                            <h4>Add projects to user</h4>
-                            <FormGroup>
-                                {userData && userData.projectId && <Label for="projectId">Projects</Label>}
+                    <Container>
+                        <Row >
+                            <Col md={6}> <Label><b>Username:</b> {`${userData && userData.userName}`}</Label> </Col>
+                            <Col md={6}><Label><b>First Name:</b> {`${userData && userData.firstName}`}</Label></Col>
+                            <Col md={6}><Label><b>Last Name:</b> {`${userData && userData.lastName}`}</Label></Col>
+                            <Col md={6}><Label><b>Role:</b> {`${userData && userData.role}`}</Label></Col>
+                        </Row>
+                        <hr />
+                    </Container>
+                </div>
+                <br></br>
+                <Row style={{ marginLeft: '2px' }}>
+                    <Col sm={11}>
+                        <h6>Add projects to user</h6>
+                        <FormGroup>
+                            {userData && userData.projectId && <Label for="projectId">Projects</Label>}
 
-                                <select className={`custom-select`} name="projectId" id="projectId" onChange={this.onChange}>
-                                    <option>Select Project</option>
-                                    {projects && projects.map((project, index) => (
-                                        <option key={index} value={project.id}>{project.projectName}</option>
-                                    ))}
-                                </select>
-
-                            </FormGroup>
-
-                        </Col>
-                        <Col style={{ float: 'right', marginTop: '37px' }} onClick={this.onClick}>
-                            <Button title="Add project to user" color="dark">Add</Button>
-                        </Col>
-                        <Col sm={9}>
-                            <h4>Add tasks to user</h4>
-                            <FormGroup>
-                                {userData && userData.projectId && <Label for="projectId">Projects</Label>}
-
-                                <select className={`custom-select`} name="projectId" id="projectId" onChange={this.onChange}>
-                                    <option>Select Project</option>
-                                    {projects && projects.map((project, index) => (
-                                        <option key={index} value={project.id}>{project.projectName}</option>
-                                    ))}
-                                </select>
-
-                            </FormGroup>
-
-                        </Col>
-                        <Col style={{ float: 'right', marginTop: '37px' }} onClick={this.onClick}>
-                            <Button title="Add project to user" color="dark">Add</Button>
-                        </Col>
-                    </Row>
-
-                    <Col>
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th>#No</th>
-                                    <th>Project Name</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {userProjectsData && userProjectsData.map((project, index) => (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{project.projectName}</td>
-                                        <td>
-                                            <Button
-                                                onClick={this.handleUserProjectDelete(project.id)}
-                                                title="Remove user from project"
-                                                className="btn-sm"
-                                                type="button"
-                                                color="danger"
-                                            >
-                                                <FontAwesomeIcon icon={faTrash} />
-                                            </Button>
-                                        </td>
-                                    </tr>
+                            <select className={`custom-select`} name="projectId" id="projectId" onChange={this.onChange}>
+                                <option>Select Project</option>
+                                {projects && projects.map((project, index) => (
+                                    <option key={index} value={project.id}>{project.projectName}</option>
                                 ))}
+                            </select>
 
-                            </tbody>
-                        </Table>
+                        </FormGroup>
+
+                    </Col>
+                    <Col style={{ float: 'right', marginTop: '27px' }} onClick={this.onClick}>
+                        <Button title="Add project to user" color="dark">Add</Button>
                     </Col>
                 </Row>
+                <Col sm={12} >
+                    <Table style={{ marginTop: '1rem' }} responsive hover striped>
+                        <thead>
+                            <tr>
+                                <th>#No</th>
+                                <th>Project Name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {userProjectsData && userProjectsData.map((project, index) => (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{project.projectName}</td>
+                                    <td>
+                                        <Button
+                                            style={{ float: 'right' }}
+                                            onClick={this.handleUserProjectDelete(project.id)}
+                                            title="Remove user from project"
+                                            className="btn-sm"
+                                            type="button"
+                                            color="danger"
+                                        >
+                                            <FontAwesomeIcon icon={faTrash} />
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
 
+                        </tbody>
+                    </Table>
+                </Col>
             </Container>
         )
     }

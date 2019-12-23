@@ -26,14 +26,17 @@ export function users(state = {}, action) {
                 loading: true,
             };
         case userConstants.CREATE_USER_SUCCESS:
+            const createdArr = [
+                action.payload, ...state.items.data
+            ]
             return {
                 ...state,
                 loading: false,
                 items: {
                     ...state.items,
-                    data: [action.payload, ...state.items.data]
+                    data: createdArr.slice(0, state.items.pageSize)
                 }
-            };
+            }
         case userConstants.CREATE_USER_FAILURE:
             return {
                 ...state,

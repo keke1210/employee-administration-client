@@ -77,7 +77,7 @@ export class ProjectsList extends Component {
 
 
     render() {
-        const { projects, departments } = this.props;
+        const { projects, departments, isAdmin } = this.props;
         console.log(departments);
 
         return (
@@ -86,7 +86,8 @@ export class ProjectsList extends Component {
                     <Row>
                         <Col>
                             <h2>Projects</h2>
-                            <AddProjectModal />
+                            {!isAdmin && <Fragment><br></br><br></br><br></br></Fragment>}
+                            {isAdmin && <AddProjectModal />}
                         </Col>
                         <Col>
                             <Input
@@ -107,7 +108,7 @@ export class ProjectsList extends Component {
                             {/* <th>Id</th> */}
                             <th>Project Name</th>
                             {/* <th>Part of department</th> */}
-                            <th></th>
+                            {isAdmin && <th></th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -118,13 +119,13 @@ export class ProjectsList extends Component {
                                     {/* <td>{project.id}</td> */}
                                     <td>{project.projectName}</td>
                                     {/* <td>{project.departmentID}</td> */}
-                                    <td className="tightcell">
+                                    {isAdmin && <td className="tightcell">
                                         {' '}
                                         <EditProjectModal project={project} /> &nbsp;
                                         <Button className="btn btn-danger btn-sm" onClick={this.handleDeleteProject(project.id)}>
                                             <FontAwesomeIcon icon={faTrash} />
                                         </Button>
-                                    </td>
+                                    </td>}
                                 </tr>
                             ))}
 
@@ -154,6 +155,7 @@ export class ProjectsList extends Component {
 }
 
 const mapStateToProps = state => ({
+    isAdmin: state.authentication.user.isAdmin,
     projects: state.projects,
     departments: state.departments
 });

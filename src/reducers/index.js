@@ -6,8 +6,8 @@ import { users, showUser, userProjects } from './users.reducer';
 import { alert } from './alert.reducer';
 import { profile } from './profile.reducer';
 import { departments, departmentsDropDown } from './department.reducer';
-import { projects, projectsDropDown } from './projects.reducer';
-import { tasks } from './tasks.reducer';
+import { projects, projectsDropDown, projectById } from './projects.reducer';
+import { tasks, userTasksDropDown, showTask, userTasks } from './tasks.reducer';
 
 const appReducer = combineReducers({
     /* app’s top-level reducers */
@@ -22,7 +22,11 @@ const appReducer = combineReducers({
     departmentsDropDown,
     projectsDropDown,
     showUser,
-    userProjects
+    userProjects,
+    projectById,
+    userTasksDropDown,
+    showTask,
+    userTasks
 })
 
 const rootReducer = (state, action) => {
